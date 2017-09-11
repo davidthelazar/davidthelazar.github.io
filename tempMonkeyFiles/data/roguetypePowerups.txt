@@ -1,0 +1,71 @@
+[SpeedUp]
+descriptionLong = "This powerup makes your ship move faster in all directions. That was probably obvious."
+popupText = "Speed Up!"
+spritePath = "sprPowerupSpeedUp.png"
+currentValue = 0
+remembered = True
+encounteredThisRun = False
+permanentValue = 0
+
+[SpeedDown]
+descriptionLong = "This powerup makes your ship move more slowly in all directions. That was probably obvious."
+popupText = "Speed Down :("
+spritePath = "sprPowerupSpeedDown.png"        
+currentValue = 0
+remembered = True
+encounteredThisRun = False
+permanentValue = 0
+
+[Bomb]
+descriptionLong = "This powerup adds a bomb weapon to your ship. It shoots along with your other weapons."
+popupText = "Bombs!"
+spritePath = "sprPowerupBomb.png"        
+currentValue = 0
+remembered = True
+encounteredThisRun = False
+permanentValue = 0
+
+[Boomerang]
+descriptionLong = "This powerup makes your bullets like, well, they wrap around and, you know I'll just let you figure it out."
+popupText = "Boomerang :\"
+spritePath = "sprPowerupBoomerang.png"        
+currentValue = 0
+remembered = True
+encounteredThisRun = False
+permanentValue = 0
+
+[Ring]
+descriptionLong = "This powerup gives your bullets spread over time."
+popupText = "Lord of the Rings"
+spritePath = "sprPowerupRing.png"        
+currentValue = 0
+remembered = True
+encounteredThisRun = False
+permanentValue = 0
+
+[HomingMissile]
+descriptionLong = "This powerup adds a homing missile launcher to your ship."
+popupText = "Home is Where the Heart is"
+spritePath = "sprPowerupHomingMissile.png"        
+currentValue = 0
+remembered = True
+encounteredThisRun = False
+permanentValue = 0
+
+[TailShot]
+descriptionLong = "This powerup adds an additional stock weapon that shoots backwards. More upgrades increases its fire rate."
+popupText = "Sdrawkcab"
+spritePath = "sprPowerupTailShot.png"   
+currentValue = 0
+remembered = True
+encounteredThisRun = False
+permanentValue = 0
+
+[Spiral]
+descriptionLong = "This weapon shoots a spiraling pulse of energy. Using... um, magnets? You'll probably believe that."
+popupText = "ARChimedes"
+spritePath = "sprPowerupSpiral.png"     
+currentValue = 0
+remembered = True
+encounteredThisRun = False
+permanentValue = 0

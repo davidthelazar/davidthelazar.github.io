@@ -1,0 +1,39 @@
+[SpeedUp]
+descriptionLong = "This powerup makes your ship move faster in all directions. That was probably obvious."
+popupText = "Speed Up!"
+spritePath = "sprPowerupSpeedUp.png"
+
+[SpeedDown]
+descriptionLong = "This powerup makes your ship move more slowly in all directions. That was probably obvious."
+popupText = "Speed Down :("
+spritePath = "sprPowerupSpeedDown.png"        
+
+[Bomb]
+descriptionLong = "This powerup adds a bomb weapon to your ship. It shoots along with your other weapons."
+popupText = "Bombs!"
+spritePath = "sprPowerupBomb.png"        
+
+[Boomerang]
+descriptionLong = "This powerup makes your bullets like, well, they wrap around and, you know I'll just let you figure it out."
+popupText = "Boomerang :\"
+spritePath = "sprPowerupBoomerang.png"        
+
+[Ring]
+descriptionLong = "This powerup gives your bullets spread over time."
+popupText = "Lord of the Rings"
+spritePath = "sprPowerupRing.png"        
+
+[HomingMissile]
+descriptionLong = "This powerup adds a homing missile launcher to your ship."
+popupText = "Home is Where the Heart is"
+spritePath = "sprPowerupHomingMissile.png"        
+
+[TailShot]
+descriptionLong = "This powerup adds an additional stock weapon that shoots backwards. More upgrades increases its fire rate."
+popupText = "Sdrawkcab"
+spritePath = "sprPowerupTailShot.png"   
+
+[Spiral]
+descriptionLong = "This weapon shoots a spiraling pulse of energy. Using... um, magnets? You'll probably believe that."
+popupText = "ARChimedes"
+spritePath = "sprPowerupSpiral.png"     

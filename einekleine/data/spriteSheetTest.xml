@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
+<!-- $TexturePacker:SmartUpdate:08acada66f2853938357cee389528710:29fc8f8560402e6d9addf98f6e92e5f1:ae28a855c3aeb8e4797d6b49196563bd$ -->
+<!--Format:
+n  => name of the sprite
+x  => sprite x pos in texture
+y  => sprite y pos in texture
+w  => sprite width (may be trimmed)
+h  => sprite height (may be trimmed)
+pX => x pos of the pivot point (relative to sprite width)
+pY => y pos of the pivot point (relative to sprite height)
+oX => sprite's x-corner offset (only available if trimmed)
+oY => sprite's y-corner offset (only available if trimmed)
+oW => sprite's original width (only available if trimmed)
+oH => sprite's original height (only available if trimmed)
+r => 'y' only set if sprite is rotated
+-->
+<TextureAtlas imagePath="spriteSheetTest.png" width="1998" height="2022">
+    <sprite n="sprHammerBar.png" x="2" y="2" w="1440" h="10" pX="0.5" pY="0.5"/>
+    <sprite n="bugBlink.gif" x="1444" y="2" w="50" h="62" pX="0.5" pY="0.5"/>
+    <sprite n="bugJump.gif" x="1444" y="2" w="50" h="62" pX="0.5" pY="0.5"/>
+    <sprite n="sprBug2Test.png" x="1496" y="2" w="500" h="62" pX="0.5" pY="0.5"/>
+    <sprite n="sprBug2.gif" x="2" y="66" w="250" h="62" pX="0.5" pY="0.5"/>
+    <sprite n="sprBug2.png" x="254" y="66" w="500" h="62" pX="0.5" pY="0.5"/>
+    <sprite n="sprMissing.png" x="756" y="66" w="128" h="64" pX="0.5" pY="0.5"/>
+    <sprite n="sprHammerStick.png" x="886" y="66" w="10" h="100" pX="0.5" pY="0.5"/>
+    <sprite n="sprHammer.png" x="898" y="66" w="240" h="120" pX="0.5" pY="0.5"/>
+    <sprite n="sprMenuButton.png" x="1140" y="66" w="800" h="150" pX="0.5" pY="0.5"/>
+    <sprite n="titleScreen.png" x="2" y="218" w="1440" h="900" pX="0.5" pY="0.5"/>
+    <sprite n="sprStringsBetter3.png" x="1444" y="218" w="80" h="900" pX="0.5" pY="0.5"/>
+    <sprite n="titleScreenGS.png" x="2" y="1120" w="1440" h="900" pX="0.5" pY="0.5"/>
+</TextureAtlas>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
+<!-- $TexturePacker:SmartUpdate:a54420b105c92fffc163c7eac11e7308:2b066ae41a6e1f53cdb76f01e9357432:1cb1382c0d8b86547042bc79783e9c61$ -->
+<TextureAtlas imagePath="spriteSheetTest30.png">
+    <SubTexture name="titleScreen" x="2" y="2" width="1440" height="900"/>
+    <SubTexture name="sprStringsBetter3" x="1444" y="2" width="80" height="900"/>
+    <SubTexture name="titleScreenGS" x="2" y="904" width="1440" height="900"/>
+    <SubTexture name="sprMenuButton" x="2" y="1806" width="800" height="150"/>
+    <SubTexture name="sprHammer" x="804" y="1806" width="240" height="120"/>
+    <SubTexture name="sprHammerStick" x="1046" y="1806" width="10" height="100"/>
+    <SubTexture name="sprMissing" x="1058" y="1806" width="128" height="64"/>
+    <SubTexture name="sprBug2Test" x="2" y="1958" width="500" height="62"/>
+    <SubTexture name="sprBug2" x="504" y="1958" width="500" height="62"/>
+    <SubTexture name="sprHammerBar" x="2" y="2022" width="1440" height="10"/>
+</TextureAtlas>
