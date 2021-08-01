@@ -45,7 +45,7 @@
 						</style>
 						<table class="sample">
 							<tr>
-								<td><center><font color="yellow" size="4"><p><i>View games.</i></p></center><center><img src="https://anlucas.neocities.org/fireplace.gif"></center><center><font color="yellow" size="2"><script>   stream = new EventSource(`https://before.sibr.dev/events/streamData`);
+								<td><center><font color="yellow" size="4"><p><i>View games.</i></p></center><center><img src="https://anlucas.neocities.org/fireplace.gif"></center><center><font color="yellow" size="2"><script>   stream = new EventSource(`https://api.sibr.dev/replay/v1/replay?from=2020-08-30T01:00:08.17Z`);
     stream.addEventListener("message", (event) => {
         const games = JSON.parse(event.data).value?.games?.schedule
         console.log(games);
