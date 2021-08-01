@@ -14,6 +14,7 @@ let gameIdx = 1;
 		thisGame = games.filter(function(x) { return x.id === gameId; })[0];
 
         console.log(thisGame);
+	    $("#updates").text(thisGame.lastUpdate);
 
     }
     catch(err)
