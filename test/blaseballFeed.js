@@ -1,5 +1,5 @@
 eventSource = new EventSource(`https://api.sibr.dev/replay/v1/replay?from=2020-08-30T01:00:08.17Z`);
-const gameIdx = 1;
+const gameIdx = 0;
 let gameId = undefined;
 eventSource.onmessage = function(event)
 {
