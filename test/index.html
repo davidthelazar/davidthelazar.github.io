@@ -5,7 +5,7 @@
 	<title>Blaseball</title>
 	<link rel="shortcut icon" href="/favicon.ico"> <!-- need favicon.ico -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script src='blaseballFeed.js'></script>
+	<script src='blaseballFeed.js' defer></script>
 </head>
 <body background="images/fifthbase.jpeg"> <!-- Need background (animated) -->
 	<font size="8" color="cyan"><p align="center"><marquee><i>Welcome to Blaseball</marquee></font></center>
@@ -52,6 +52,10 @@
 							<tr>
 								<td><center><font color="yellow" size="4">	
 									<div id = 'blaseball'>
+										<label for="startTime">Start time:</label>
+
+										<input type="datetime-local" id="startTime"
+										       name="startTime" value="2020-08-27T01:00">
 										<div id = 'updates'>
 									
 										</div>
