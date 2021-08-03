@@ -24,10 +24,12 @@ this.timeGrabber.addEventListener('change', (event) => {
 			{
 	            gameId = games[idx].id;
 				thisGame = games.filter(function(x) { return x.id === gameId; })[0];
-
-		        console.log(thisGame);
+				let baseString = (thisGame.basesOccupied.includes(0) ? '1' : '0')+(thisGame.basesOccupied.includes(1) ? '1' : '0') +(thisGame.basesOccupied.includes(2) ? '1' : '0')
+				// let filename = '${baseString}.gif'
+		        // console.log(filename);
+				
 			    // $("#updates").text(thisGame.lastUpdate);
-				$("#updates").append("<li>"+thisGame.lastUpdate+"</li>");
+				$("#updates").append("<li>"+thisGame.lastUpdate+`<img src=images/${baseString}.gif></li>`);
 		
 			}
 	
