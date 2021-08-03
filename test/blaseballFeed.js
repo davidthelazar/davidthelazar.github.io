@@ -4,7 +4,7 @@ let gameId = undefined;
 this.timeGrabber = document.getElementById('startTime');
 // const timeGrabber = $('#startTime')
 let self = this;
-this.eventSource = new EventSource(`https://api.sibr.dev/replay/v1/replay?from=2020-08-27T01:00:08.17Z`);
+this.eventSource = new EventSource(`https://api.sibr.dev/replay/v1/replay?from=2021-07-21T01:00:08.17Z`);
 this.timeGrabber.addEventListener('change', (event) => {
 	self.eventSource.close();
 	self.eventSource = new EventSource(`https://api.sibr.dev/replay/v1/replay?from=${event.target.value}`);
