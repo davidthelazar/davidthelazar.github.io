@@ -1,6 +1,35 @@
-/*.floaty {
-    display: none;
-}*/
+@font-face {
+  font-family: 'Comic Sans MS';
+  src: url("images/comic.ttf");
+}
+table
+{
+	width:670px;
+}
+th
+{
+	height:50px;
+}
+
+
+table.sample {
+	border-width: 5px;
+	border-spacing: 2px;
+	border-style: outset;
+	border-color: gold;
+	border-collapse: separate;
+	font-family: 'Comic Sans MS';
+	background: blue url(https://anlucas.neocities.org/bluetexture.gif) repeat
+}
+table.sample td {
+	border-width: 1px;
+	padding: 1px;
+	border-style: inset;
+	border-color: gold;
+	font-family: 'Comic Sans MS';
+	background: blue url(https://anlucas.neocities.org/bluetexture.gif) repeat
+	-moz-border-radius: ;
+}
 
 .squid .floaty {
     display: revert;
