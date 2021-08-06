@@ -5,39 +5,34 @@ this.timeGrabber = document.getElementById('startTime');
 // const timeGrabber = $('#startTime')
 let self = this;
 this.eventSource = new EventSource(`https://api.sibr.dev/replay/v1/replay?from=2021-07-21T01:00:08.17Z`);
-	this.eventSource.onmessage = doUpdates;
+this.eventSource.onmessage = doUpdates;
 this.timeGrabber.addEventListener('change', (event) => {
 	self.eventSource.close();
 	self.eventSource = new EventSource(`https://api.sibr.dev/replay/v1/replay?from=${event.target.value}`);
-		self.eventSource.onmessage = doUpdates;
-
-	
-	
+		self.eventSource.onmessage = doUpdates;	
 });
 function doUpdates(event)
 {
-    try
-    {
-        update = JSON.parse(event.data);
-        games = update.value.games.schedule;
-
-        // if(gameId === undefined)
-//         {
-//
-//         }
-	    $("#updates").html("<ul></ul>");
-		for (let idx = 0; idx < games.length; idx++) 
+	try
+	{
+	    let snapshots = digestSnapshots(event)
+		let scoreString = ``;
+		let updatesString = ``;
+	    // $("#updates").html("<ul>");
+	    // $("#scores").html("<marquee>");
+		for (let idx = 0; idx < snapshots.length; idx++) 
 		{
-            gameId = games[idx].id;
-			thisGame = games.filter(function(x) { return x.id === gameId; })[0];
-			let baseString = (thisGame.basesOccupied.includes(0) ? '1' : '0')+(thisGame.basesOccupied.includes(1) ? '1' : '0') +(thisGame.basesOccupied.includes(2) ? '1' : '0')
-			// let filename = '${baseString}.gif'
-	        // console.log(filename);
-			
-		    // $("#updates").text(thisGame.lastUpdate);
-			$("#updates").append("<li>"+thisGame.lastUpdate+`<img src=images/${baseString}.gif></li>`);
-	
+			// updatesString = updatesString+`<li><div>`+snapshots[idx].lastUpdate+`<div class="wrap-wrapper"><div><img style="float:left" src=images/${snapshots[idx].baseString}.gif></div><div><p>butts</p><p>lol</p></div></div></div></li>`;
+						updatesString = updatesString+`<li>`+snapshots[idx].lastUpdate+`<img src=images/${snapshots[idx].baseString}.gif></li>`;
+			// scoreString = scoreString+`${snapshots[idx].homeTeamNickname} (${snapshots[idx].homeScore}) vs ${snapshots[idx].awayTeamNickname} (${snapshots[idx].awayScore})     `;
+			// $("#updates").append(`<li>${snapshots[idx].homeTeamNickname}(${snapshots[idx].homeScore}) v ${snapshots[idx].awayTeamNickname}(${snapshots[idx].awayScore}): `+snapshots[idx].lastUpdate+`<img src=images/${snapshots[idx].baseString}.gif></li>`);
+				// $("#updates").append(`<li>`+snapshots[idx].lastUpdate+`<img src=images/${snapshots[idx].baseString}.gif></li>`);
+				// $("#scores").append(`${snapshots[idx].homeTeamNickname} (${snapshots[idx].homeScore}) vs ${snapshots[idx].awayTeamNickname} (${snapshots[idx].awayScore})     `);
 		}
+	    // $("#updates").html("<ul>"+updatesString+"</ul>");
+	    $("#updates").html(updatesString);
+	    // $("#scores").html("<marquee>"+scoreString+"</marquee>");
+		
 
     }
     catch(err)

@@ -10,9 +10,14 @@ th
 {
 	height:50px;
 }
-
+#scores
+{
+	font-family: 'Comic Sans MS';
+	color:"pink";
+}
 
 table.sample {
+/*	width: 80%;*/
 	border-width: 5px;
 	border-spacing: 2px;
 	border-style: outset;
@@ -83,4 +88,8 @@ div.horizontalgap {
   overflow: hidden;
   height: 1px;
   width: 0px;
+}
+.wrap-wrapper {
+  display: flex;
+  align-items: center
 }
