@@ -26,6 +26,21 @@ function digestSnapshots(event)
 		snapshot.baserunnerCount = snapshot.basesOccupied.length;
 		snapshot.baseString = (thisGame.basesOccupied.includes(0) ? '1' : '0')+(thisGame.basesOccupied.includes(1) ? '1' : '0') +(thisGame.basesOccupied.includes(2) ? '1' : '0');
 		
+		if (thisGame.awayBatter==null)
+		{
+			snapshot.maxStrikes = thisGame.homeStrikes;
+			snapshot.maxOuts = thisGame.homeOuts;
+			snapshot.maxBalls = thisGame.homeBalls;
+			snapshot.totalBases = thisGame.homeBases-1;
+		}
+		else
+		{
+			snapshot.maxStrikes = thisGame.awayStrikes;
+			snapshot.maxOuts = thisGame.awayOuts;
+			snapshot.maxBalls = thisGame.awayBalls;
+			snapshot.totalBases = thisGame.awayBases-1;
+		}
+		
 		snapshots[idx] = snapshot;
 		
 	}	

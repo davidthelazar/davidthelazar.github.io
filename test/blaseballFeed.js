@@ -21,18 +21,23 @@ function doUpdates(event)
 	{
 	    let snapshots = digestSnapshots(event)
 		let scoreString = ``;
-		let updatesString = ``;
+		let updatesString = `<ul>`;
 	    // $("#updates").html("<ul>");
 	    // $("#scores").html("<marquee>");
 		for (let idx = 0; idx < snapshots.length; idx++) 
 		{
 			// updatesString = updatesString+`<li><div>`+snapshots[idx].lastUpdate+`<div class="wrap-wrapper"><div><img style="float:left" src=images/${snapshots[idx].baseString}.gif></div><div><p>butts</p><p>lol</p></div></div></div></li>`;
-						updatesString = updatesString+`<li>`+snapshots[idx].lastUpdate+`<img src=images/${snapshots[idx].baseString}.gif></li>`;
+			let ballStr = `<img src="images/circle.png">`.repeat(snapshots[idx].maxBalls-snapshots[idx].balls)+`<img class = "spot" src="images/coolspot.gif">`.repeat(snapshots[idx].balls);	 
+			let strikeStr = `<img src="images/circle.png">`.repeat(snapshots[idx].maxStrikes-snapshots[idx].strikes)+`<img class = "spot" src="images/coolspot.gif">`.repeat(snapshots[idx].strikes);
+			let outStr = `<img src="images/circle.png">`.repeat(snapshots[idx].maxOuts-snapshots[idx].outs)+`<img class = "spot" src="images/coolspot.gif">`.repeat(snapshots[idx].outs);
+			
+			updatesString = updatesString+`<div class="left-update">`+snapshots[idx].lastUpdate+`</div><div class="img-update"><img src=images/${snapshots[idx].baseString}.gif></div><div class="right-update">Balls ${ballStr}<br>Strikes ${strikeStr}<br>Outs ${outStr}</div>`;
 			// scoreString = scoreString+`${snapshots[idx].homeTeamNickname} (${snapshots[idx].homeScore}) vs ${snapshots[idx].awayTeamNickname} (${snapshots[idx].awayScore})     `;
 			// $("#updates").append(`<li>${snapshots[idx].homeTeamNickname}(${snapshots[idx].homeScore}) v ${snapshots[idx].awayTeamNickname}(${snapshots[idx].awayScore}): `+snapshots[idx].lastUpdate+`<img src=images/${snapshots[idx].baseString}.gif></li>`);
 				// $("#updates").append(`<li>`+snapshots[idx].lastUpdate+`<img src=images/${snapshots[idx].baseString}.gif></li>`);
 				// $("#scores").append(`${snapshots[idx].homeTeamNickname} (${snapshots[idx].homeScore}) vs ${snapshots[idx].awayTeamNickname} (${snapshots[idx].awayScore})     `);
 		}
+		updatesString = updatesString+'</ul>'
 	    // $("#updates").html("<ul>"+updatesString+"</ul>");
 	    $("#updates").html(updatesString);
 	    // $("#scores").html("<marquee>"+scoreString+"</marquee>");
