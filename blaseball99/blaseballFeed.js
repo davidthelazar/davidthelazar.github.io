@@ -27,9 +27,9 @@ function doUpdates(event)
 		for (let idx = 0; idx < snapshots.length; idx++) 
 		{
 			// updatesString = updatesString+`<li><div>`+snapshots[idx].lastUpdate+`<div class="wrap-wrapper"><div><img style="float:left" src=images/${snapshots[idx].baseString}.gif></div><div><p>butts</p><p>lol</p></div></div></div></li>`;
-			let ballStr = `<img src="images/circle.png">`.repeat(snapshots[idx].maxBalls-snapshots[idx].balls)+`<img class = "spot" src="images/coolspot.gif">`.repeat(snapshots[idx].balls);	 
-			let strikeStr = `<img src="images/circle.png">`.repeat(snapshots[idx].maxStrikes-snapshots[idx].strikes)+`<img class = "spot" src="images/coolspot.gif">`.repeat(snapshots[idx].strikes);
-			let outStr = `<img src="images/circle.png">`.repeat(snapshots[idx].maxOuts-snapshots[idx].outs)+`<img class = "spot" src="images/coolspot.gif">`.repeat(snapshots[idx].outs);
+			let ballStr = `<img src="images/circle.png">`.repeat(snapshots[idx].maxBalls-snapshots[idx].balls-1)+`<img class = "spot" src="images/coolspot.gif">`.repeat(snapshots[idx].balls);	 
+			let strikeStr = `<img src="images/circle.png">`.repeat(snapshots[idx].maxStrikes-snapshots[idx].strikes-1)+`<img class = "spot" src="images/coolspot.gif">`.repeat(snapshots[idx].strikes);
+			let outStr = `<img src="images/circle.png">`.repeat(snapshots[idx].maxOuts-snapshots[idx].outs-1)+`<img class = "spot" src="images/coolspot.gif">`.repeat(snapshots[idx].outs);
 			
 			updatesString = updatesString+`<div class="left-update">`+snapshots[idx].lastUpdate+`</div><div class="img-update"><img src=images/${snapshots[idx].baseString}.gif></div><div class="right-update">Balls ${ballStr}<br>Strikes ${strikeStr}<br>Outs ${outStr}</div>`;
 			// scoreString = scoreString+`${snapshots[idx].homeTeamNickname} (${snapshots[idx].homeScore}) vs ${snapshots[idx].awayTeamNickname} (${snapshots[idx].awayScore})     `;
