@@ -61,7 +61,7 @@ async function getTicker(timeStr){
 			{
 				tickerStr = tickerStr+response[idx].msg+'&nbsp'.repeat(90);
 			} 
-			console.log(tickerStr)
+			// console.log(tickerStr)
 	 return tickerStr;
 }
     

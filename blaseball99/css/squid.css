@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'Comic Sans MS';
-  src: "images/comic.ttf";
+  src: url("../images/comic.ttf");
 }
 table
 {
