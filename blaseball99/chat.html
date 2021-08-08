@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script type='text/javascript' src='https://cdn.scaledrone.com/scaledrone.min.js'></script>
+  <!--<script type='text/javascript' src='http://0.0.0.0:8080/scaledrone.js'></script>-->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 13px;
+      display: flex;
+      flex-direction: column;
+      max-height: 100vh;
+      font-family: "Comic Sans MS";
+	  background-color:rgb(222,215,197);
+/*	  background: blue url(https://anlucas.neocities.org/bluetexture.gif) repeat*/
+    }
+
+    .members-count,
+    .members-list,
+    .messages {
+      border: 1px solid #e4e4e4;
+      padding: 15px;
+      margin-bottom: 15px;
+	  background-color:white;
+    }
+
+    .messages {
+      flex-shrink: 1;
+      overflow: auto;
+	  background-color:white;
+    }
+
+    .message {
+      padding: 5px 0;
+  	  background-color:white;
+    }
+    .message .member {
+      display: inline-block;
+    }
+
+    .member {
+      padding-right: 10px;
+      position: relative;
+    }
+
+    .message-form {
+      display: flex;
+      flex-shrink: 0;
+	  	  background-color:white;
+    }
+    .message-form__input {
+      flex-grow: 1;
+      border: 1px solid #dfdfdf;
+      padding: 10px 15px;
+      font-size: 16px;
+    }
+    .message-form__button {
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+	<div class="title">AOL Immaterial Messenger</div>
+  <div class="members-count">-</div>
+  <div class="members-list">-</div>
+  <div class="messages"></div>
+  <form class="message-form" onsubmit="return false;">
+    <input class="message-form__input" placeholder="Type a message.." type="text"/>
+    <input class="message-form__button" value="Send" type="submit"/>
+  </form>
+<p align="center"><img src="images/skull.gif">&nbsp;<img src="images/blaseballBadge.png">&nbsp;<img src="images/skull.gif"></p>
+<p align="center"><img src="images/divider1.gif" width="75%" height="20px"></p>
+<br>
+<center><img src="images/b1.gif" border=0><img src="images/b2.gif" border=0><img src="images/b3.gif" border=0><img src="images/b4.gif" border=0><img src="images/b5.gif" border=0><img src="images/b6.gif" border=0></center>
+<center><img src="images/b7.gif" border=0><img src="images/b8.gif" border=0><img src="images/b9.gif" border=0><img src="images/b10.gif" border=0><img src="images/b11.gif" border=0><img src="images/b12.gif" border=0></center>
+<p align="center"><img src="images/flamingline.gif" width="75%" height="20px"></p>
+  <script src="./chat.js"></script>
+</body>
+</html>
