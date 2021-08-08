@@ -35,6 +35,66 @@ th
 	clear:both;
 /*	display:block;*/
 }
+.team-update
+{
+	margin-top: -10px;
+    float: left;
+    padding: 15px;
+	font-family: 'Comic Sans MS';
+	height:75px;
+	width:100px;
+		text-align:right;
+/*		clear:both;*/
+/*	display:block;*/
+}
+.inning-update
+{
+	margin-top: -10px;
+    float: left;
+    padding: 15px;
+	font-family: 'Comic Sans MS';
+	height:75px;
+	line-height:75px;
+	width:100px;
+		text-align:right;
+		    font-size:28px;
+				vertical-align:middle;
+/*		clear:both;*/
+/*	display:block;*/
+}
+.inning-update img
+{
+	width:25px;
+	height:auto;
+	vertical-align:middle;
+	padding:10px;
+}
+.team-update img
+{
+/*	float:left*/
+/*	vertical-align:middle;*/
+	height:30px;
+	width:30px;
+	padding:5px;
+
+}
+.teamimg
+{
+	vertical-align:middle;
+	float:left;
+	clear:both;
+	height:40px;
+	width:40px;
+}
+.teamScore
+{
+	float:right;
+	text-align:right;
+	height:40px;
+	line-height:40px;
+	width:40px;
+	vertical-align:middle;
+}
 .img-update
 {
 
@@ -50,6 +110,7 @@ th
     float: left;
     padding: 15px;
 	font-family: 'Comic Sans MS';
+	width : 150px;
 /*	clear:both;*/
 /*	display:block;*/
 }

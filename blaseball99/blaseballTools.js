@@ -17,6 +17,7 @@ function digestSnapshots(event)
 		snapshot.homeTeamNickname = thisGame.homeTeamNickname;			
 		snapshot.lastUpdate = thisGame.lastUpdate;
 		snapshot.inning = thisGame.inning;
+		snapshot.topOfInning = thisGame.topOfInning;
 		snapshot.outs = thisGame.halfInningOuts;
 		snapshot.strikes = thisGame.atBatStrikes;
 		snapshot.balls = thisGame.atBatBalls;

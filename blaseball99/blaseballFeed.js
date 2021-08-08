@@ -30,8 +30,13 @@ function doUpdates(event)
 			let ballStr = `<img src="images/circle.png">`.repeat(snapshots[idx].maxBalls-snapshots[idx].balls-1)+`<img class = "spot" src="images/coolspot.gif">`.repeat(snapshots[idx].balls);	 
 			let strikeStr = `<img src="images/circle.png">`.repeat(snapshots[idx].maxStrikes-snapshots[idx].strikes-1)+`<img class = "spot" src="images/coolspot.gif">`.repeat(snapshots[idx].strikes);
 			let outStr = `<img src="images/circle.png">`.repeat(snapshots[idx].maxOuts-snapshots[idx].outs-1)+`<img class = "spot" src="images/coolspot.gif">`.repeat(snapshots[idx].outs);
-			
-			updatesString = updatesString+`<div class="left-update">`+snapshots[idx].lastUpdate+`</div><div class="img-update"><img src=images/${snapshots[idx].baseString}.gif></div><div class="right-update">Balls ${ballStr}<br>Strikes ${strikeStr}<br>Outs ${outStr}</div>`;
+			let teamStr = `<div class="teamimg"><img src="images/teams/${snapshots[idx].homeTeamNickname}.png"></div> <div class="teamScore">${snapshots[idx].homeScore}</div> <div class="teamimg"><img src="images/teams/${snapshots[idx].awayTeamNickname}.png"> </div><div class="teamScore">${snapshots[idx].awayScore}</div>`;
+			let inningStr = ``;
+			if (snapshots[idx].inning>-1)
+			{ 
+				inningStr = snapshots[idx].topOfInning?`<img src="images/arrowup.gif">${snapshots[idx].inning+1}`:`<img src="images/arrowdown.gif">${snapshots[idx].inning+1}`;
+			}
+			updatesString = updatesString+`<div class="left-update">`+snapshots[idx].lastUpdate+`</div><div class="img-update"><img src=images/${snapshots[idx].baseString}.gif></div><div class="right-update">Balls ${ballStr}<br>Strikes ${strikeStr}<br>Outs ${outStr}</div><div class=team-update>${teamStr}</div><div class=inning-update>${inningStr}</div>`;
 			// scoreString = scoreString+`${snapshots[idx].homeTeamNickname} (${snapshots[idx].homeScore}) vs ${snapshots[idx].awayTeamNickname} (${snapshots[idx].awayScore})     `;
 			// $("#updates").append(`<li>${snapshots[idx].homeTeamNickname}(${snapshots[idx].homeScore}) v ${snapshots[idx].awayTeamNickname}(${snapshots[idx].awayScore}): `+snapshots[idx].lastUpdate+`<img src=images/${snapshots[idx].baseString}.gif></li>`);
 				// $("#updates").append(`<li>`+snapshots[idx].lastUpdate+`<img src=images/${snapshots[idx].baseString}.gif></li>`);
