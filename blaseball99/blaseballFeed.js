@@ -59,7 +59,7 @@ async function getTicker(timeStr){
 	let response = await fetch(`https://api.sibr.dev/chronicler/v2/entities?type=globalevents&at=${timeStr}:00.000000Z`).then(res=>res.json()).then(tree=>tree.items[0].data);
 		for(let idx=0;idx<response.length;idx++)
 			{
-				tickerStr = tickerStr+response[idx].msg+'<tickertab>';
+				tickerStr = tickerStr+response[idx].msg+'&nbsp'.repeat(90);
 			} 
 			console.log(tickerStr)
 	 return tickerStr;
