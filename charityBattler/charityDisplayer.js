@@ -194,8 +194,9 @@ var referenceTime = 1629577075332;
 // b = new charity("Child's Play");
 // c = new charity('Trevor Project');
 // d = new charity('Nowzad');
+var lootcrates = new historian();
 $.getJSON('http://davidthelazar.com/charityBattler/lootcrates.json', function(data) {         
-	var lootcrates = Object.assign(new historian, data);
+	lootcrates = Object.assign(lootcrates, data);
 });
 // var lootcrates = new historian();
 // var best = tournament([a,b,c,d],lootcrates);
