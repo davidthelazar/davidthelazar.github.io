@@ -164,7 +164,8 @@ function tournament(allCharities,hist)
 				hist.addEvent(new event(allCharities[2*idx],allCharities[2*idx+1],'start',jdx+1));
 				battle(allCharities[2*idx],allCharities[2*idx+1],hist)
 			}
-			console.log(allCharities[2*idx].wins,allCharities[2*idx+1].wins);
+			Math.random<.5?console.log(allCharities[2*idx].wins,allCharities[2*idx+1].wins):console.log(allCharities[2*idx+1].wins,allCharities[2*idx].wins);
+			
 			if (allCharities[2*idx].wins>allCharities[2*idx+1].wins)
 			{
 				hist.addEvent(new event(allCharities[2*idx],allCharities[2*idx+1],'wonseries',0));
@@ -189,8 +190,8 @@ function tournament(allCharities,hist)
 	return allCharities[0];
 }
 
-var referenceTime = 1629577075332;
-a = new charity('ASPCA');
+// var referenceTime = 1629577075332;
+a = new charity('ACLU');
 b = new charity("Child's Play");
 c = new charity('Trevor Project');
 d = new charity('Nowzad');
@@ -198,83 +199,3 @@ d = new charity('Nowzad');
 var lootcrates = new historian();
 var best = tournament([a,b,c,d],lootcrates);
 console.log(JSON.stringify(lootcrates));
-var idx = 0;
-var currentTime = Date.now();
-const updateTime = 500;
-var updatesStr = '';
-var id = setInterval(function(){
-	currentTime = Date.now();
-	updateNum = Math.floor((currentTime-referenceTime)/updateTime);
-	console.log(lootcrates.events[updateNum].getString());
-	
-	updatesString = ''
-	// let ballStr = `<img src="images/circle.png">`.repeat(snapshots[idx].maxBalls-snapshots[idx].balls-1)+`<img class = "spot" src="images/coolspot.gif">`.repeat(snapshots[idx].balls);
-	// let strikeStr = `<img src="images/circle.png">`.repeat(snapshots[idx].maxStrikes-snapshots[idx].strikes-1)+`<img class = "spot" src="images/coolspot.gif">`.repeat(snapshots[idx].strikes);
-	// let outStr = `<img src="images/circle.png">`.repeat(snapshots[idx].maxOuts-snapshots[idx].outs-1)+`<img class = "spot" src="images/coolspot.gif">`.repeat(snapshots[idx].outs);
-	// let teamStr = `<div class="teamScore">${lootcrates.events[updateNum].thing1.name} Wins: ${lootcrates.events[updateNum].thing1.wins} || HP: ${lootcrates.events[updateNum].thing1.health} </div><div class="teamScore">${lootcrates.events[updateNum].thing2.name} Wins: ${lootcrates.events[updateNum].thing2.wins} || HP: ${lootcrates.events[updateNum].thing2.health} </div>`;
-	if(lootcrates.events[updateNum].thing1.name<lootcrates.events[updateNum].thing2.name)
-	{
-		updatesString = updatesString+`<div class="left-update">`+lootcrates.events[updateNum].getString()+`<br>${lootcrates.events[updateNum].thing1.name} Wins: ${lootcrates.events[updateNum].thing1.wins} || HP: ${lootcrates.events[updateNum].thing1.health} <br>${lootcrates.events[updateNum].thing2.name} Wins: ${lootcrates.events[updateNum].thing2.wins} || HP: ${lootcrates.events[updateNum].thing2.health} </div>`;
-	}
-	else
-	{
-		updatesString = updatesString+`<div class="left-update">`+lootcrates.events[updateNum].getString()+`<br>${lootcrates.events[updateNum].thing2.name} Wins: ${lootcrates.events[updateNum].thing2.wins} || HP: ${lootcrates.events[updateNum].thing2.health} <br>${lootcrates.events[updateNum].thing1.name} Wins: ${lootcrates.events[updateNum].thing1.wins} || HP: ${lootcrates.events[updateNum].thing1.health} </div>`;
-	}
-    $("#updates").html(updatesString);
-	// idx=idx+1;
-	if(updateNum>=lootcrates.events.length){clearInterval(id);}
-},updateTime);
-// for(var idx=0;idx<lootcrates.events.length;idx++)
-// {
-// 	console.log(lootcrates.events[idx].getString());
-// }
-// console.log(best.name);
-
-// for(var idx=0;idx<21;idx++)
-// {	//
-// 	// chanceVect.push(a.attackChance(),b.attackChance(),c.attackChance());
-// 	// attackVect.push(a.attackRoll(),b.attackRoll(),c.attackRoll());
-// 	// defendVect.push(a.defendRoll(),b.defendRoll(),c.defendRoll());
-//
-// 	// console.log('a chance ' + a.attackChance());
-// 	// console.log('b chance ' + b.attackChance());
-// 	// console.log('c chance ' + c.attackChance());
-// 	// console.log('a attack ' + a.attackRoll());
-// 	// console.log('b attack ' + b.attackRoll());
-// 	// console.log('c attack ' + c.attackRoll());
-// 	// console.log('a defend ' + a.defendRoll());
-// 	// console.log('b defend ' + b.defendRoll());
-// 	// console.log('c defend ' + c.defendRoll());
-// 	battle(a,b);
-//
-// }
-// for(var idx=0;idx<21;idx++)
-// {
-// 	battle(c,d);
-// }
-// var seed1 = a;
-//
-// if (b.wins>a.wins)
-// 	{ seed1=b;}
-// var seed2 = c;
-//
-// if (d.wins>c.wins)
-// 	{ seed2=d;}
-//
-//
-// for(var idx=0;idx<21;idx++)
-// {
-// 	battle(seed1,seed2);
-// }
-// if(seed1.wins>seed2.wins)
-// {
-// 	console.log(seed1.name)
-// }
-// else
-// {
-// 	console.log(seed2.name)
-// }
-
-// console.log(chanceVect);
-// console.log(attackVect);
-// console.log(defendVect);
