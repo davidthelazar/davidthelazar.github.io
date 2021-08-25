@@ -2,10 +2,7 @@
 let gameIdx = 0;
 let gameId = undefined;
 //attach a click listener to a play button
-document.querySelector('startButton')?.addEventListener('onClick', async () => {
-	await Tone.start()
-	console.log('audio is ready')
-})
+document.getElementById('startButton').addEventListener('click', Tone.start());
 this.timeGrabber = document.getElementById('startTime');
 // this.gameGrabber = document.getElementById('whichGame');
 let self = this;
@@ -35,7 +32,7 @@ var rootIndex = minimumIndex;
 
 var strikeScaleIdx = [0,3,4,6] //ugh, zero indexing. SO this is root, 4th,5th,7th
 var ballScaleIdx = [0,2,4,5,6] //ugh, zero indexing. SO this is root, 3rd,5th,6th,7th
-var outWigglyFactors = [0,20,50,100]
+var outWigglyFactors = [15,20,50,100]
 // var outWigglyFactors = [1,1.2,1.6,1.8]
 
 var inningSynth = new Tone.AMSynth().toDestination();
@@ -95,8 +92,10 @@ var	awaySequence = new Tone.Sequence(((time) => {
 		}),[]).start(updateTime/4);
 var allSynths = [inningSynth,strikeSynth,ballSynth];
 
-
-
+var ballPattern = new Tone.Pattern(function(time, note){
+			strikeSynth.triggerAttackRelease(note, 0.25);
+		}, []).start(0);
+var ballpeggio = [];
 // function getNoteIndex(noteStr)
 // {
 // 	return allNotes.indexOf(noteStr);
@@ -136,20 +135,31 @@ function doUpdates(event)
 		
 
 		
-		// Tone.Transport.start()
+
 		// inningSynth.triggerAttack(allNotes[rootIndex]);
 		strikeSynth.modulationIndex.value = outWigglyFactors[snapshot.outs];
 		// strikeSynth.harmonicity.value = outWigglyFactors[snapshot.outs];
 		strikeSynth.triggerAttack(allNotes[rootIndex+strikeScaleIdx[snapshot.strikes]]);
-		ballSynth.triggerAttack(allNotes[rootIndex+12+ballScaleIdx[snapshot.balls]]);
+		// ballSynth.triggerAttack(allNotes[rootIndex+12+ballScaleIdx[snapshot.balls]]);
 		// strikeSynth.harmonicity.value = (strikeScaleIdx[snapshot.strikes]+12)/12
+		ballpeggio = [];
+		for (var idx=0;idx<snapshot.balls+1;idx++)
+		{
+			ballpeggio.push(allNotes[rootIndex+strikeScaleIdx[snapshot.strikes]+ballScaleIdx[idx]]);
+		}
+		ballPattern = new Tone.Pattern(function(time, note){
+			strikeSynth.triggerAttackRelease(note, updateTime/(snapshot.balls+1));
+		}, ballpeggio);
+		ballPattern.start(0);
+		console.log(updateTime/(snapshot.balls+1));
+		
 		console.log('strikes: '+snapshot.strikes);
 		console.log('balls: '+snapshot.balls);
 		console.log('outs: '+snapshot.outs);
 		console.log('homeScore: '+snapshot.homeScore);
 		console.log('awayScore: '+snapshot.awayScore);
 
-
+		Tone.Transport.start();
 }
 // const bell = new Tone.MetalSynth({
 // 			harmonicity: 12,

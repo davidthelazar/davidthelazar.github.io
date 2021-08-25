@@ -106,8 +106,9 @@ function battle(charity1,charity2,hist)
 			var damage = charity1.attackRoll() - charity2.defendRoll();
 			if( damage > 0)
 			{
-				hist.addEvent(new event(charity1,charity2,'damage',damage));
+
 				charity2.health = charity2.health-damage;
+				hist.addEvent(new event(charity1,charity2,'damage',damage));
 			}
 			else
 			{
@@ -119,8 +120,9 @@ function battle(charity1,charity2,hist)
 			var damage = charity2.attackRoll() - charity1.defendRoll();
 			if( damage > 0)
 			{
-				hist.addEvent(new event(charity2,charity1,'damage',damage));
+
 				charity1.health = charity1.health-damage;
+				hist.addEvent(new event(charity2,charity1,'damage',damage));
 			}
 			else
 			{
