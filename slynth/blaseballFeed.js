@@ -109,17 +109,17 @@ var posHomeDrumSynth = new Tone.MembraneSynth({
 			// },
 				volume: 0
 		}).toDestination();
-var negHomeDrumSynth = new Tone.PluckSynth().toDestination();// {
-// 			// pitchDecay: 0.008,
-// 			// octaves: 2,
-// 			// envelope: {
-// 			// 	attack: 0.0006,
-// 			// 	decay: 0.5,
-// 			// 	sustain: 0
-// 			// },
-// 				volume: 0
-// 		}).toDestination();
-var homeDrumSynth = new Tone.PluckSynth().toDestination();		
+var negHomeDrumSynth = new Tone.MembraneSynth({//}.toDestination();// {
+			pitchDecay: 0.4,
+			octaves: 2,
+			envelope: {
+				attack: 0.0006,
+				decay: 0.5,
+				sustain: 0
+			},
+				volume: 0
+		}).toDestination();
+var homeDrumSynth = new Tone.MembraneSynth().toDestination();		
 var homeSpacing = 0;
 var	homeDrumSequence = new Tone.Sequence(((time, pitch) => {
 			homeDrumSynth.triggerAttack(pitch, time);
@@ -130,29 +130,32 @@ var lowPass = new Tone.Filter({
 		}).toDestination();
 
 var posAwayDrumSynth = new Tone.NoiseSynth({
-		  volume: -15,
-		  noise: {
-		    type: 'white',
-		    playbackRate: 3,
-		  },
-		  envelope: {
-		    attack: 0.03,
-		    decay: 0.20,
-		    sustain: 0.15,
-		    release: 0.001,
-		  },
-		}).connect(lowPass);
-var negAwayDrumSynth = new Tone.PluckSynth().toDestination();// {
-// 			// pitchDecay: 0.008,
-// 			// octaves: 2,
-// 			// envelope: {
-// 			// 	attack: 0.0006,
-// 			// 	decay: 0.5,
-// 			// 	sustain: 0
-// 			// },
-// 				volume: 0
-// 		}).toDestination();
-var awayDrumSynth = new Tone.PluckSynth().toDestination();			
+	  volume: -15,
+	  noise: {
+	    type: 'white',
+	    playbackRate: 3
+	  },
+	  envelope: {
+	    attack: 0.03,
+	    decay: 0.20,
+	    sustain: 0.15,
+	    release: 0.001,
+	  },
+	}).connect(lowPass);
+var negAwayDrumSynth = new Tone.NoiseSynth({
+	volume: -10,
+	noise:{
+		playbackRate: 1000,
+		type: "pink"
+	},
+	  envelope: {
+	    attack: 0.03,
+	    decay: 0.20,
+	    sustain: 0.15,
+	    release: 0.001,
+	  }
+	}).toDestination();
+var awayDrumSynth = new Tone.NoiseSynth().toDestination();			
 var awaySpacing = 0;
 
 var	awayDrumSequence = new Tone.Sequence(((time) => {
@@ -236,16 +239,16 @@ function doUpdates(event)
 			if (snapshot.homeScore<0)
 			{
 				console.log('butts');
-				homeDrumSynth = negHomeDrumSynth;
+				// homeDrumSynth = negHomeDrumSynth;
 				homeDrumSequence = new Tone.Sequence(((time, pitch) => {
-					homeDrumSynth.triggerAttack(pitch, time);
+					negHomeDrumSynth.triggerAttack(pitch, time);
 				}), [allNotes[rootIndex-24]], homeSpacing).start(0);
 			}
 			else
 			{
-				homeDrumSynth = posHomeDrumSynth;
+				// homeDrumSynth = posHomeDrumSynth;
 				homeDrumSequence = new Tone.Sequence(((time, pitch) => {
-					homeDrumSynth.triggerAttack(pitch, time);
+					posHomeDrumSynth.triggerAttack(pitch, time);
 				}), [allNotes[rootIndex-24]], homeSpacing).start(0);				
 			}
 
@@ -260,16 +263,19 @@ function doUpdates(event)
 			if (snapshot.awayScore<0)
 			{
 				console.log('butts but away');
-				awayDrumSynth = negAwayDrumSynth;
+				// awayDrumSynth = negAwayDrumSynth;
 				awayDrumSequence = new Tone.Sequence(((time,pitch) => {
-					awayDrumSynth.triggerAttack(pitch,time);
-				}), [allNotes[rootIndex+12]],[awaySpacing]).start(0); 
+					negAwayDrumSynth.triggerAttack(time);
+				}),[1],[awaySpacing]).start(0); //1 is just a bs placeholder
+				// awayDrumSequence = new Tone.Sequence(((time,pitch) => {
+				// 	awayDrumSynth.triggerAttack(pitch,time);
+				// }), [allNotes[rootIndex+12]],[awaySpacing]).start(0);
 			}
 			else
 			{
-				awayDrumSynth = posAwayDrumSynth;
+				// awayDrumSynth = posAwayDrumSynth;
 				awayDrumSequence = new Tone.Sequence(((time,pitch) => {
-					awayDrumSynth.triggerAttack(time);
+					posAwayDrumSynth.triggerAttack(time);
 				}),[1],[awaySpacing]).start(0); //1 is just a bs placeholder
 			}
 		}			
