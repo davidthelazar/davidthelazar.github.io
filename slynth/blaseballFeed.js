@@ -1,16 +1,16 @@
 // eventSource = new EventSource(`https://api.sibr.dev/replay/v1/replay?from=2020-08-27T01:00:08.17Z`);
 let gameIdx = 0;
-let gameId = undefined;
-//attach a click listener to a play button
-document.getElementById('startButton').addEventListener('click', Tone.start());
-this.timeGrabber = document.getElementById('startTime');
-this.gameGrabber = document.getElementById('gamesOptions');
-let self = this;
-this.eventSource = new EventSource(`https://api.sibr.dev/replay/v1/replay?from=2021-07-21T01:00:08.17Z`);
-gameIdx = 0;
 var updateTime = 4; //seconds, will control synth beats but also should control game updates 
 var updateGamesListFlag = true;
+
+//attach a click listener to a play button
+document.getElementById('startButton').addEventListener('click', () => {initialize()});
+this.timeGrabber = document.getElementById('startTime');
+this.gameGrabber = document.getElementById('gamesOptions');
+
+this.eventSource = new EventSource(`https://api.sibr.dev/replay/v1/replay?from=2021-07-21T01:00:08.17Z`);
 this.eventSource.onmessage = doUpdates;
+let self = this;
 this.timeGrabber.addEventListener('change', (event) => {
 
 	self.eventSource.close();
@@ -43,11 +43,7 @@ var rootIndex = minimumIndex;
 
 var strikeScaleIdx = [0,3,4,6,8] //ugh, zero indexing. SO this is root, 4th,5th,7th
 var ballScaleIdx = [0,2,4,5,6,7,9,11,12,14,16,17,18,19,21,23] //ugh, zero indexing. SO this is root, 3rd,5th,6th,7th
-var outWigglyFactors = [15,20,50,100]
-// var outWigglyFactors = [1,1.2,1.6,1.8]
-
-var inningSynth = new Tone.AMSynth().toDestination();
-// var strikeSynth = new Tone.DuoSynth().toDestination();
+// var outWigglyFactors = [15,20,50,100]
 
 const filter = new Tone.AutoFilter({
 			baseFrequency:'C4',
@@ -99,61 +95,41 @@ var homeSynth = new Tone.Synth({
 				"spread": 20
 			}
 		}).connect(filter);
+		
 var strikeSynth = new Tone.FMSynth().connect(filter);
 strikeSynth.oscillator.type = 'sine';
 
-var homeDrumSelectedSynth = new Tone.FMSynth().toDestination();
-var awayDrumSelectedSynth = new Tone.FMSynth().toDestination();
-
-var ballSynth = new Tone.AMSynth().toDestination();
-ballSynth.oscillator.type = "sine";
-// new Tone.MembraneSynth({
-// 			pitchDecay: 0.008,
-// 			octaves: 2,
-// 			envelope: {
-// 				attack: 0.0006,
-// 				decay: 0.5,
-// 				sustain: 0
-// 			}
+var posHomeDrumSynth = new Tone.MembraneSynth({
+			// pitchDecay: 0.008,
+			// octaves: 2,
+			// envelope: {
+			// 	attack: 0.0006,
+			// 	decay: 0.5,
+			// 	sustain: 0
+			// },
+				volume: 0
+		}).toDestination();
+var negHomeDrumSynth = new Tone.PluckSynth().toDestination();// {
+// 			// pitchDecay: 0.008,
+// 			// octaves: 2,
+// 			// envelope: {
+// 			// 	attack: 0.0006,
+// 			// 	decay: 0.5,
+// 			// 	sustain: 0
+// 			// },
+// 				volume: 0
 // 		}).toDestination();
-var homeDrumSynth = new Tone.MembraneSynth({
-			// pitchDecay: 0.008,
-			// octaves: 2,
-			// envelope: {
-			// 	attack: 0.0006,
-			// 	decay: 0.5,
-			// 	sustain: 0
-			// },
-				volume: 0
-		}).toDestination();
-var altHomeDrumSynth = new Tone.PluckSynth({
-			// pitchDecay: 0.008,
-			// octaves: 2,
-			// envelope: {
-			// 	attack: 0.0006,
-			// 	decay: 0.5,
-			// 	sustain: 0
-			// },
-				volume: 0
-		}).toDestination();
+var homeDrumSynth = new Tone.PluckSynth().toDestination();		
 var homeSpacing = 0;
 var	homeDrumSequence = new Tone.Sequence(((time, pitch) => {
 			homeDrumSynth.triggerAttack(pitch, time);
 		}), [allNotes[rootIndex-12]], homeSpacing).start(0);
-// var awayDrumSynth = new Tone.MetalSynth({
-// 			harmonicity: 12,
-// 			resonance: 800,
-// 			modulationIndex: 20,
-// 			envelope: {
-// 				decay: 0.4,
-// 			},
-// 			volume: -30
-// 		}).toDestination();
+
 var lowPass = new Tone.Filter({
 		  frequency: 8000,
 		}).toDestination();
 
-var awayDrumSynth = new Tone.NoiseSynth({
+var posAwayDrumSynth = new Tone.NoiseSynth({
 		  volume: -15,
 		  noise: {
 		    type: 'white',
@@ -166,20 +142,19 @@ var awayDrumSynth = new Tone.NoiseSynth({
 		    release: 0.001,
 		  },
 		}).connect(lowPass);
-var altAwayDrumSynth = new Tone.PluckSynth({
-			// pitchDecay: 0.008,
-			// octaves: 2,
-			// envelope: {
-			// 	attack: 0.0006,
-			// 	decay: 0.5,
-			// 	sustain: 0
-			// },
-				volume: 0
-		}).toDestination();		
+var negAwayDrumSynth = new Tone.PluckSynth().toDestination();// {
+// 			// pitchDecay: 0.008,
+// 			// octaves: 2,
+// 			// envelope: {
+// 			// 	attack: 0.0006,
+// 			// 	decay: 0.5,
+// 			// 	sustain: 0
+// 			// },
+// 				volume: 0
+// 		}).toDestination();
+var awayDrumSynth = new Tone.PluckSynth().toDestination();			
 var awaySpacing = 0;
-// var	awayDrumSequence = new Tone.Sequence(((time, pitch) => {
-// 			awayDrumSynth.triggerAttack(pitch, time);
-// 		}), [allNotes[rootIndex+12]], awaySpacing).start(updateTime/8);
+
 var	awayDrumSequence = new Tone.Sequence(((time) => {
 			awayDrumSynth.triggerAttack(time);
 		}),[]).start(0);
@@ -216,107 +191,95 @@ var basepeggio=[];
 
 Tone.Transport.start();	
 		
-var allSynths = [inningSynth,strikeSynth,ballSynth];
+// var allSynths = [inningSynth,strikeSynth,ballSynth];
 
 var ballPattern = new Tone.Pattern(function(time, note){
 			strikeSynth.triggerAttackRelease(note, 0.25);
 		}, []).start(0);
 var ballpeggio = [];
-// function getNoteIndex(noteStr)
-// {
-// 	return allNotes.indexOf(noteStr);
-// }
+
 Tone.Transport.start();
 function doUpdates(event)
 {		//TODO: negative scores
 	//TODO:don't play weird non-inning bits
 	//TODO: still overlapping on inning change?
-	//TODO: make sure bases synth plaing notes in correct duration/volume, etc.
-	//TODO: gameChooser
+	//TODO: Fix on iOS
 	// Tone.Transport.stop();
+    let snapshots = digestSnapshots(event);
+	let snapshot = snapshots[gameIdx];
+	if (Tone.context.state === "running" && snapshot.inning>-1)
+	{
+		Tone.Transport.cancel();
 
-	Tone.Transport.cancel();
-	    let snapshots = digestSnapshots(event);
-		let snapshot = snapshots[gameIdx];
 		if (updateGamesListFlag)
 		{
 			updateGamesList(snapshots);
 			updateGamesListFlag = false;
 		}
-		
-		if(snapshot.topOfInning)
+	
+		if (snapshot.topOfInning)
+		{
+			strikeSynth = awaySynth;
+		}
+		else
+		{
+			strikeSynth = homeSynth;
+		}
+		rootIndex = minimumIndex+snapshot.inning;
+		if (snapshot.homeScore == 0)
+		{
+			homeSpacing = 0;
+		} //will never play?
+		else
+		{ 
+			homeSpacing = updateTime/(Math.abs(snapshot.homeScore));
+			if (snapshot.homeScore<0)
 			{
-				strikeSynth = awaySynth;
+				console.log('butts');
+				homeDrumSynth = negHomeDrumSynth;
+				homeDrumSequence = new Tone.Sequence(((time, pitch) => {
+					homeDrumSynth.triggerAttack(pitch, time);
+				}), [allNotes[rootIndex-24]], homeSpacing).start(0);
 			}
 			else
 			{
-				strikeSynth = homeSynth;
+				homeDrumSynth = posHomeDrumSynth;
+				homeDrumSequence = new Tone.Sequence(((time, pitch) => {
+					homeDrumSynth.triggerAttack(pitch, time);
+				}), [allNotes[rootIndex-24]], homeSpacing).start(0);				
 			}
-		rootIndex = minimumIndex+snapshot.inning;
-		if (snapshot.homeScore == 0)
-			{
-				homeSpacing = 0;
-			} //will never play?
-		else
-			{ 
-				homeSpacing = updateTime/Math.abs(snapshot.homeScore);
-				if (snapshot.homeScore<0)
-				{
-					console.log('butts');
-					homeDrumSequence = new Tone.Sequence(((time, pitch) => {
-						altHomeDrumSynth.triggerAttack(pitch, time);
-					}), [allNotes[rootIndex-24]], homeSpacing).start(0);
-				}
-				else
-				{
-					homeDrumSequence = new Tone.Sequence(((time, pitch) => {
-						homeDrumSynth.triggerAttack(pitch, time);
-					}), [allNotes[rootIndex-24]], homeSpacing).start(0);				
-				}
 
-			}
+		}
 		if (snapshot.awayScore == 0)
-			{
-				awaySpacing = 0;
-			} //will never play?
+		{
+			awaySpacing = 0;
+		} //will never play?
 		else
+		{
+			awaySpacing = updateTime/(Math.abs(snapshot.awayScore));
+			if (snapshot.awayScore<0)
 			{
-				awaySpacing = updateTime/Math.abs(snapshot.awayScore);
-				if (snapshot.awayScore<0)
-				{
-					console.log('butts but away');
-					awayDrumSequence = new Tone.Sequence(((time,pitch) => {
-						altAwayDrumSynth.triggerAttack(pitch,time);
-					}), [allNotes[rootIndex+12]],[awaySpacing]).start(0); 
-				}
-				else
-				{
-					awayDrumSequence = new Tone.Sequence(((time,pitch) => {
-						awayDrumSynth.triggerAttack(time);
-					}),[1],[awaySpacing]).start(0); //1 is just a bs placeholder
-				}
-			}			
-		
-
-		
-
-		
-		// var baseFreq = 6000;
-		// if (snapshot.outs>0)
-		// {
-		// 	baseFreq = 400;
-		// }
+				console.log('butts but away');
+				awayDrumSynth = negAwayDrumSynth;
+				awayDrumSequence = new Tone.Sequence(((time,pitch) => {
+					awayDrumSynth.triggerAttack(pitch,time);
+				}), [allNotes[rootIndex+12]],[awaySpacing]).start(0); 
+			}
+			else
+			{
+				awayDrumSynth = posAwayDrumSynth;
+				awayDrumSequence = new Tone.Sequence(((time,pitch) => {
+					awayDrumSynth.triggerAttack(time);
+				}),[1],[awaySpacing]).start(0); //1 is just a bs placeholder
+			}
+		}			
+	
 		filter.set({
-			// baseFrequency:baseFreq,
 			frequency: (4**snapshot.outs),
 			depth: .4*snapshot.outs
 		});
-		// inningSynth.triggerAttack(allNotes[rootIndex]);
-		// strikeSynth.modulationIndex.value = outWigglyFactors[snapshot.outs];
-		// strikeSynth.harmonicity.value = outWigglyFactors[snapshot.outs];
-		strikeSynth.triggerAttack(allNotes[rootIndex+getMajorIdx[strikeScaleIdx[snapshot.strikes]]]);
-		// ballSynth.triggerAttack(allNotes[rootIndex+12+ballScaleIdx[snapshot.balls]]);
-		// strikeSynth.harmonicity.value = (strikeScaleIdx[snapshot.strikes]+12)/12
+		// strikeSynth.triggerAttack();
+	
 		ballpeggio = [];
 		for (var idx=0;idx<2**snapshot.balls;idx++)
 		{
@@ -326,27 +289,27 @@ function doUpdates(event)
 			strikeSynth.triggerAttackRelease(note, updateTime/(2**snapshot.balls));
 		}, ballpeggio);
 		ballPattern.start(0);
-		
+	
 		basepeggio = [];
 		for (var idx=0;idx<snapshot.basesOccupied.length;idx++)
-			{console.log(idx);basepeggio.push(allNotes[rootIndex+getMajorIdx(baseNotes[snapshot.basesOccupied[idx]])]);}
-	
+			{basepeggio.push(allNotes[rootIndex+getMajorIdx(baseNotes[snapshot.basesOccupied[idx]])]);}
+
 		baseSequence = new Tone.Sequence((time, note) => {
 			baseSynth.triggerAttackRelease(note, .5, time);
-		}, basepeggio,updateTime/2).start(0);
-		
+		}, basepeggio,updateTime/(2*basepeggio.length)).start(0);
+	
 		baseSequence.start(0);
-		
-		
-		console.log(updateTime/(snapshot.balls+1));
-		
+		console.log('|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|')				
+		console.log('inning: '+snapshot.inning);				
 		console.log('strikes: '+snapshot.strikes);
 		console.log('balls: '+snapshot.balls);
 		console.log('outs: '+snapshot.outs);
+		console.log('bases: '+snapshot.basesOccupied);
 		console.log('homeScore: '+snapshot.homeScore);
 		console.log('awayScore: '+snapshot.awayScore);
 
 		Tone.Transport.start();
+	}
 }
 function getMajorIdx(scaleIdx)
 {
@@ -385,6 +348,12 @@ function flipUpdateFlag()
 function setGameIdx(choice)
 {
 	gameIdx = choice;
+}
+function initialize()
+{
+	Tone.start();
+	var trashSynth = new Tone.Synth();
+	trashSynth.triggerAttack();
 }
 // const bell = new Tone.MetalSynth({
 // 			harmonicity: 12,
