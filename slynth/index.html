@@ -1,72 +1,32 @@
-
 <!DOCTYPE html>
 <html>
 <head>
 	<title>Slynthesizer</title>
-	<link rel="shortcut icon" href="/favicon.ico"> <!-- need favicon.ico -->
+	<!-- <link rel="shortcut icon" href="/favicon.ico"> <!-- need favicon.ico --> -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src='blaseballTools.js' defer></script>
 	<script src='blaseballFeed.js' defer></script>
 	<script src='https://tonejs.github.io/build/Tone.js'></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="css/squid.css">
 
 </head>
-<body background="images/bg5.png"> 
-	<!-- <audio autoplay loop>
-	      <source src="images/KORN.mp3">
-	</audio> -->
-	<font size="8" color="cyan"><p align="center"><marquee><i>Welcome to Blaseball</marquee></font>
-	<!-- <center><img src="images/blaseballBadge.png"></center> -->
-	<!-- <font size="6" color="magenta"><marquee direction="up" behavior = "alternate"><i><p align="center">Baseball at your mercy</marquee></font> -->
-	<center><img src="images/ballspin.gif"><img src="images/blaseballbannerflame.gif"><img src="images/ballspin.gif"></center> 
-	<hr color="#0080FF">
-	<center><a href="aboutUs.html" class = "links">About Me</a> <a href="coin.html" class="links" style="margin-left: 3em">Another Boss Webpage!</a><a href="teams.html" class="links" style="margin-left: 3em">Teams</a><a href="chat.html" class="links" style="margin-left: 3em" target="_blank">AIM</a></center>
-	<hr color="#0080FF">
-	<div id = 'scores'>
-
+<body style="background-color:#000000;"> 
+	
+	<div id="titleContent">
+		<p>Please imagine graphics...</p>
 	</div>
-	<font size="4" color="magenta">
-		<div id = 'ticker'>
+	<center>
+		<button type="button" id = "startButton">Click Me!</button>
+		<br>
+		<!-- <label for="startTime">Enter a time:</label> -->
+		<input type="datetime-local" id="startTime" name="startTime" value="2021-07-21T01:00">
+		<br>
+		<!-- <label for="games">Choose a game:</label> -->
 
-		</div>
-	</font>
-
-		<table class = "sample">
-			<tr>
-				<td><font color="yellow" size="4">	
-					<center>
-
-						<button type="button" id = "startButton">Click Me!</button>
-						<label for="startTime">Enter a time:</label>
-						<input type="datetime-local" id="startTime" name="startTime" value="2021-07-21T01:00">
-						<br>
-						<label for="games">Choose a game:</label>
-
-						<select name="games" id="gamesOptions">
-						</select>
-					</center>
-					<div id = 'updates'>
-				 
-					</div>
-				</td>
-			</tr>
-		</table>
-		<center><img style="width:30%"src="images/greatjobgross.gif"><br><a href="peanuts.html"><img src= "images/secretNut.png"></a></center>
+		<select name="games" id="gamesOptions">
+		</select>
+	</center>
 		
-
-	<p align="center"><img src="images/skull.gif">&nbsp;<img src="images/blaseballBadge.png">&nbsp;<img src="images/skull.gif"></p>
-	<p align="center"><img src="images/divider1.gif" width="75%" height="20px"></p>
-	<br>
-	<center><img src="images/b1.gif" border=0><img src="images/b2.gif" border=0><img src="images/b3.gif" border=0><img src="images/b4.gif" border=0><img src="images/b5.gif" border=0><img src="images/b6.gif" border=0></center>
-	<center><img src="images/b7.gif" border=0><img src="images/b8.gif" border=0><img src="images/b9.gif" border=0><img src="images/b10.gif" border=0><img src="images/b11.gif" border=0><img src="images/b12.gif" border=0></center>
-	<p align="center"><img src="images/flamingline.gif" width="75%" height="20px"></p>
-	<!-- <center><audio controls autoplay style="width:200px">
-		<source src="images/KORN.mp3" type="audio/mpeg">
-		Your browser does not support the audio element.
-	</audio> -->
-</center>
-	<!-- <div style = "text-align:left; float:left;">
-		<i><font face="times new roman" size="4" color="gray">&copy; Copyright David Lazar, 2021 and FOR ALL TIME!!! </font></i>
-	</div> -->
 </body>
 </html>
