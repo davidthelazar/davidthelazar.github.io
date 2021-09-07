@@ -2,18 +2,19 @@
 const urlParams = new URLSearchParams(window.location.search);
 const urlStartTime = urlParams.get('at');
 const urlGameId = urlParams.get('game');
-var haveILoadedBubbles = false;
+
+var firstTime = true;
+
 var gameId = 0;
 if (urlGameId !==null)
 {
 	gameId = urlGameId;
 }
-const updateTime = 4; //seconds, will control synth beats but also should control game updates 
+var updateTime = 1; //seconds, will control synth beats but also should control game updates 
 var updateTimeFudged = updateTime;
 var updateGamesListFlag = true;
 var curseMultiplier = 1;
 var previousSnapshot = {};
-var gameObjects = [];
 //attach a click listener to a play button
 document.getElementById('startButton').addEventListener('click', () => {initialize()});
 document.getElementById('curseButton').addEventListener('click', () => {increaseCurse()});
@@ -28,8 +29,9 @@ if (urlStartTime!==null)
 this.gameGrabber = document.getElementById('gamesOptions');
 this.updateRateGrabber = document.getElementById('updateRateSelect');
 this.volumeGrabber = document.getElementById('volumeSlider');
+this.speedGrabber = document.getElementById('speedSlider');
 var dateTemp = new Date(document.getElementById('startTime').value);
-this.eventSource = new EventSource(`https://api.sibr.dev/replay/v1/replay?from=${dateTemp.toISOString()}`);
+this.eventSource = new EventSource(`https://api.sibr.dev/replay/v1/replay?from=${dateTemp.toISOString()}&interval=${updateTimeFudged*1000}`);
 this.eventSource.onmessage = doUpdates;
 let self = this;
 this.timeGrabber.addEventListener('change', (event) => {
@@ -53,10 +55,35 @@ this.gameGrabber.addEventListener('change', (event) => {
 });
 this.updateRateGrabber.addEventListener('change', (event) => {
 	
-	if (event.target.value)
+	if (event.target.checked)
 		{updateTimeFudged = updateTime/3;}
 	else
-		{updateTimeFudged = updateTime}
+		{updateTimeFudged = updateTime;}
+	var strTemp = self.eventSource.url;
+	strTemp = replaceQueryParam('interval',`${updateTimeFudged*1000}`, strTemp);
+	self.eventSource.close();
+	self.eventSource = new EventSource(strTemp);
+	self.eventSource.onmessage = doUpdates;	
+});
+this.volumeGrabber.addEventListener('change', (event) => {
+	var volTemp = (event.target.value-100)/2;
+	if (event.target.value == 0)
+	{
+		volTemp = -Infinity;
+	}
+	Tone.getDestination().volume.rampTo(volTemp, 0);
+});
+this.speedGrabber.addEventListener('change', (event) => {
+	if (event.target.value==7)	//gotta be == since event value is a string
+		{updateTime=0.5;}
+	else
+		{updateTime = 7-event.target.value;}
+	
+	if (self.updateRateGrabber.checked)
+		{updateTimeFudged = updateTime/3;}
+	else
+		{updateTimeFudged = updateTime;}
+	
 	var strTemp = self.eventSource.url;
 	strTemp = replaceQueryParam('interval',`${updateTimeFudged*1000}`, strTemp);
 	self.eventSource.close();
@@ -73,6 +100,7 @@ this.volumeGrabber.addEventListener('change', (event) => {
 });
 var eventTemp = new Event('change');
 volumeGrabber.dispatchEvent(eventTemp);
+speedGrabber.dispatchEvent(eventTemp);
 // this.gameGrabber.addEventListener('change', (event) => {
 //
 // 	self.gameId = event.target.value;
@@ -98,7 +126,8 @@ var filter = new Tone.AutoFilter({
 			depth: 0 
 		}).toDestination().start();
 // var homeSynth = new Tone.FMSynth().connect(filter);//toDestination();
-var awaySynth = new Tone.Synth({
+var awaySynth = new Tone.PolySynth(Tone.Synth).connect(filter);
+awaySynth.set({
 			"volume": 0,
 			"detune": 0,
 			"portamento": 0.05,
@@ -119,8 +148,9 @@ var awaySynth = new Tone.Synth({
 				"count": 3,
 				"spread": 10
 			}
-		}).connect(filter);
-var homeSynth = new Tone.Synth({
+		});
+var homeSynth = new Tone.PolySynth(Tone.Synth).connect(filter);	
+homeSynth.set({
 			"volume": 0,
 			"detune": 0,
 			"portamento": 0.05,
@@ -141,10 +171,10 @@ var homeSynth = new Tone.Synth({
 				"count": 3,
 				"spread": 20
 			}
-		}).connect(filter);
-		
-var strikeSynth = new Tone.FMSynth().connect(filter);
-strikeSynth.oscillator.type = 'sine';
+		});
+	
+var strikeSynth = new Tone.PolySynth().connect(filter);
+// strikeSynth.oscillator.type = 'sine';
 
 var posHomeDrumSynth = new Tone.MembraneSynth({
 			// pitchDecay: 0.008,
@@ -243,9 +273,13 @@ Tone.Transport.start();
 		
 // var allSynths = [inningSynth,strikeSynth,ballSynth];
 
-var ballPattern = new Tone.Pattern(function(time, note){
-			strikeSynth.triggerAttackRelease(note, 0.25);
-		}, []).start(0);
+// var ballPattern = new Tone.Pattern(function(time, note){
+// 			strikeSynth.triggerAttackRelease(note, updateTime/16);
+// 		}, []).start(0);
+var ballSequence = new Tone.Sequence(function(time, note){
+			strikeSynth.triggerAttackRelease(note, updateTime/16);
+		}, [],1).start(0);
+		
 var ballpeggio = [];
 
 var distortion = new Tone.Distortion(0.8).toDestination();
@@ -284,16 +318,6 @@ function doUpdates(event)
 	}
 	
 	var snapshot = getSnapshotById(snapshots,gameId);
-	if (!haveILoadedBubbles)
-	{
-		gameObjects[0] = popGameObject(snapshot,"local",0,true);
-		haveILoadedBubbles = true;
-	}
-	else
-	{
-		gameObjects[0] = popGameObject(snapshot,"local",0,false);
-	}
-	
 	if (Tone.context.state === "running" && snapshot.inning>-1 && !compareSnapshots(snapshot,previousSnapshot))
 	{
 		previousSnapshot = Object.assign(previousSnapshot,snapshot);
@@ -371,10 +395,15 @@ function doUpdates(event)
 		{
 			ballpeggio.push(allNotes[rootIndex+getMajorIdx(strikeScaleIdx[snapshot.strikes])+getMajorIdx(ballScaleIdx[idx])]);
 		}
-		ballPattern = new Tone.Pattern(function(time, note){
-			strikeSynth.triggerAttackRelease(note, updateTime/(2**snapshot.balls));
-		}, ballpeggio);
-		ballPattern.start(0);
+		// ballPattern = new Tone.Pattern(function(time, note){
+		// 	strikeSynth.triggerAttackRelease(note, updateTime/(2**snapshot.balls));
+		// }, ballpeggio);
+		// ballPattern.start(0);
+		ballSequence = new Tone.Sequence(function(time, note){
+			strikeSynth.triggerAttackRelease(note, updateTime/(2**snapshot.balls),time);
+		}, ballpeggio,updateTime/(2**snapshot.balls));
+		ballSequence.start(0);
+	
 	
 		basepeggio = [];
 		snapshot.basesOccupied.sort();
@@ -403,6 +432,19 @@ function doUpdates(event)
 		console.log('awayScore: '+snapshot.awayScore);
 
 		Tone.Transport.start();
+		if (document.body.classList.contains('bubbles'))
+		{
+			if (firstTime)
+			{
+				// var gameObjects = []
+				popGameObject(snapshot,"local",0,true);
+				firstTime = false;
+			}
+			else
+			{
+				popGameObject(snapshot,"local",0,false);
+			}
+		}	
 	}
 }
 function getMajorIdx(scaleIdx)

@@ -13,7 +13,8 @@ function digestSnapshots(event)
         // console.log(thisGame);
         //need: inning, halfInningOuts, atBatStrikes, atBatBalls, awayScore,homeScore, basesOccupied (or baserunnerCount)
 	    // $("#updates").text(thisGame.lastUpdate);
-		snapshot.data = thisGame;
+		snapshot.data = thisGame; //store all raw data just in case. But use below fields for convenience
+		
 		snapshot.id = thisGame.id;
 		snapshot.awayTeamNickname = thisGame.awayTeamNickname;
 		snapshot.homeTeamNickname = thisGame.homeTeamNickname;			

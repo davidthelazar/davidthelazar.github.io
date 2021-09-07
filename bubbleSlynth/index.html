@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Slynthesizer</title>
+	<title>bubbleslynth</title>
 	<!-- <link rel="shortcut icon" href="/favicon.ico">  need favicon.ico --> 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script src='blaseballTools.js' defer></script>
-	<script src='blaseballFeed.js' defer></script>
+	<script src='../blaseballfiles/blaseballTools.js' defer></script>
+	<script src='../blaseballfiles/slynthesizer.js' defer></script>
 	<script src='https://tonejs.github.io/build/Tone.js'></script>
     <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="css/squid.css">
@@ -15,11 +15,11 @@
     <script src="https://d3js.org/d3.v3.min.js"></script>
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script> -->
 
-    <script src="display.js"></script>
-    <script src="bubbles.js"></script>
+    <script src="../blaseballfiles/display.js"></script>
+    <script src="../blaseballfiles/bubbles.js"></script>
 	
 </head>
-<body> 
+<body class='bubbles'> 
 	
 		<div>
 			<div id="lighttoggle"><i class="fas fa-lightbulb"></i></div>
@@ -40,7 +40,9 @@
 		<br><br>
 		<label for="volumeSlider" style='color:white'>Volume:</label>
 		<input type="range" name="volume" id="volumeSlider" min="0" max="100" value="25">
-
+		<br><br>
+		<label for="speedSlider" style='color:white'>Speed (adjusting will reset to start time):</label>
+		<input type="range" name="speed" id="speedSlider" min="1" max="6" value="3">
 		<br><br>
 		<button type="button" id = "curseButton">I thought you said this was <i>cursed</i></button>
 		<br><br><br>
