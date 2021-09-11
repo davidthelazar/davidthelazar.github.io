@@ -1,124 +1,48 @@
 // eventSource = new EventSource(`https://api.sibr.dev/replay/v1/replay?from=2020-08-27T01:00:08.17Z`);
 const urlParams = new URLSearchParams(window.location.search);
-const urlStartTime = urlParams.get('at');
-const urlGameId = urlParams.get('game');
-const urlSpeed = urlParams.get('speed');
-
-var firstTime = true;
-
 var gameId = 0;
-if (urlGameId !==null)
+if (urlParams.get('game') !==null)
 {
-	gameId = urlGameId;
+	gameId = urlParams.get('game');
 }
-var updateTime; //seconds, will control synth beats but also should control game updates 
-if (urlSpeed !==null)
+
+if (urlParams.get('speed') !==null)
 {
-	updateTime = speed2Time(urlSpeed);
+	updateTime = speed2Time(urlParams.get('speed'));
 }
 else
 {
 	updateTime = speed2Time(document.getElementById('speedSlider').value);
 }
+if (urlParams.get('at')!==null)
+{
+	const timeTemp = new Date(urlParams.get('at'));
+	const timeStr = toLocalIsoString(timeTemp);
+	document.getElementById('startTime').value = timeStr;
+}
+
+let self = this;
+var firstTime = true;
+var updateTime; //seconds, will control synth beats but also should control game updates 
 var updateTimeFudged = updateTime;
 var updateGamesListFlag = true;
 var curseMultiplier = 1;
 var previousSnapshot = {};
-//attach a click listener to a play button
-document.getElementById('startButton').addEventListener('click', () => {initialize()});
-document.getElementById('curseButton').addEventListener('click', () => {increaseCurse()});
 
-this.timeGrabber = document.getElementById('startTime');
-if (urlStartTime!==null)
-{
-	const timeTemp = new Date(urlStartTime);
-	const timeStr = toLocalIsoString(timeTemp);
-	this.timeGrabber.value = timeStr;
-}
-this.gameGrabber = document.getElementById('gamesOptions');
-this.updateRateGrabber = document.getElementById('updateRateSelect');
-this.volumeGrabber = document.getElementById('volumeSlider');
-this.speedGrabber = document.getElementById('speedSlider');
 var dateTemp = new Date(document.getElementById('startTime').value);
-this.eventSource = new EventSource(`https://api.sibr.dev/replay/v1/replay?from=${dateTemp.toISOString()}&interval=${updateTimeFudged*1000}`);
-this.eventSource.onmessage = doUpdates;
-let self = this;
-this.timeGrabber.addEventListener('change', (event) => {
+var eventSource;
+setEventSource(null,dateTemp.toISOString(),updateTimeFudged);
 
-	self.eventSource.close();
-	var dateTemp = new Date(event.target.value);
-	console.log(dateTemp.toUTCString());
-	self.eventSource = new EventSource(`https://api.sibr.dev/replay/v1/replay?from=${dateTemp.toISOString()}&interval=${updateTimeFudged*1000}`);
-	self.eventSource.onmessage = doUpdates;	
-	flipUpdateFlag();
-	// self.updateGamesListFlag = true;
-});
-this.gameGrabber.addEventListener('change', (event) => {
-	
-	choice = $('#gamesOptions').val();
-	setGameId(choice);
-	var strTemp = window.location.search;
-	strTemp = replaceQueryParam('game', gameId, strTemp);
-	history.replaceState({test:'test'},'game',strTemp);
+setAllEventListeners(self);
 
-});
-this.updateRateGrabber.addEventListener('change', (event) => {
-	
-	if (event.target.checked)
-		{updateTimeFudged = updateTime/3;}
-	else
-		{updateTimeFudged = updateTime;}
-	var strTemp = self.eventSource.url;
-	strTemp = replaceQueryParam('interval',`${updateTimeFudged*1000}`, strTemp);
-	self.eventSource.close();
-	self.eventSource = new EventSource(strTemp);
-	self.eventSource.onmessage = doUpdates;	
-});
-this.volumeGrabber.addEventListener('change', (event) => {
-	var volTemp = (event.target.value-100)/2;
-	if (event.target.value == 0)
-	{
-		volTemp = -Infinity;
-	}
-	Tone.getDestination().volume.rampTo(volTemp, 0);
-});
-this.speedGrabber.addEventListener('change', (event) => {
-	
-	updateTime = speed2Time(event.target.value);
-	
-	if (self.updateRateGrabber.checked)
-		{updateTimeFudged = updateTime/3;}
-	else
-		{updateTimeFudged = updateTime;}
-	
-	var strTemp = self.eventSource.url;
-	strTemp = replaceQueryParam('interval',`${updateTimeFudged*1000}`, strTemp);
-	self.eventSource.close();
-	self.eventSource = new EventSource(strTemp);
-	self.eventSource.onmessage = doUpdates;	
-});
-this.volumeGrabber.addEventListener('change', (event) => {
-	var volTemp = (event.target.value-100)/2;
-	if (event.target.value == 0)
-	{
-		volTemp = -Infinity;
-	}
-	Tone.getDestination().volume.rampTo(volTemp, 0);
-});
 var eventTemp = new Event('change');
-volumeGrabber.dispatchEvent(eventTemp);
-speedGrabber.value = time2Speed(updateTime);
+document.getElementById('volumeSlider').dispatchEvent(eventTemp);
+document.getElementById('speedSlider').value = time2Speed(updateTime);
 var eventTemp = new Event('change');
-speedGrabber.dispatchEvent(eventTemp);
-
-// this.gameGrabber.addEventListener('change', (event) => {
-//
-// 	self.gameId = event.target.value;
-// });
+document.getElementById('speedSlider').dispatchEvent(eventTemp);
 
 
-
-//synth shit
+//music shit
 var allNotes = ["C0","C#0","D0","D#0","E0","F0","F#0","G0","G#0","A0","A#0","B0","C1","C#1","D1","D#1","E1","F1","F#1","G1","G#1","A1","A#1","B1","C2","C#2","D2","D#2","E2","F2","F#2","G2","G#2","A2","A#2","B2","C3","C#3","D3","D#3","E3","F3","F#3","G3","G#3","A3","A#3","B3","C4","C#4","D4","D#4","E4","F4","F#4","G4","G#4","A4","A#4","B4","C5","C#5","D5","D#5","E5","F5","F#5","G5","G#5","A5","A#5","B5","C6","C#6","D6","D#6","E6","F6","F#6","G6","G#6","A6","A#6","B6","C7","C#7","D7","D#7","E7","F7","F#7","G7","G#7","A7","A#7","B7","C8","C#8","D8","D#8","E8","F8","F#8","G8","G#8","A8","A#8","B8"];
 var majorIdx = [0,2,4,5,7,9,11,12];
 var minorIdx = [0,2,3,5,7,8,10,12];
@@ -128,6 +52,7 @@ var rootIndex = minimumIndex;
 
 var strikeScaleIdx = [0,3,4,6,7,10,11,13,14]; //ugh, zero indexing. SO this is root, 4th,5th,7th
 var ballScaleIdx = [0,2,4,5,6,7,9,11,12,14,16,17,18,19,21+0,21+2,21+4,21+5,21+6,21+7,21+9,21+11,21+12,21+14,21+16,21+17,21+18,21+19,42+0,42+2,42+4,42+5,42+6,42+7,42+9,42+11,42+12,42+14,42+16,42+17,42+18,42+19]; //ugh, zero indexing. SO this is root, 3rd,5th,6th,7th
+var baseScaleIdx = [3,5,6,14,17]; //fuck, 4th, 6th, and 7th, sounds like LoZ
 // var outWigglyFactors = [15,20,50,100]
 
 var filter = new Tone.AutoFilter({
@@ -271,7 +196,7 @@ var baseSynth = new Tone.PolySynth({
 	}
 }).toDestination(); //Should this go through the filter?
 		
-var baseNotes = [3,5,6,14,17]; //fuck, 4th, 6th, and 7th, sounds like LoZ
+
 		// 467
 var baseSequence = new Tone.Sequence((time, note) => {
 	synth.triggerAttackRelease(note, .5, time);
@@ -311,7 +236,7 @@ Tone.Transport.start();
 function doUpdates(event)
 {		
 	//TODO: still overlapping on inning change?
-
+	console.log(event.currentTarget.url);
 	// Tone.Transport.stop();
     var snapshots = digestSnapshots(event);
 	if (updateGamesListFlag)
@@ -321,9 +246,9 @@ function doUpdates(event)
 		{
 			gameId = snapshots[0].id;
 		}
-		gameGrabber.value = gameId;
+		document.getElementById('gamesOptions').value = gameId;
 		var event = new Event('change');
-		gameGrabber.dispatchEvent(event);
+		document.getElementById('gamesOptions').dispatchEvent(event);
 		updateGamesListFlag = false;
 	}
 	
@@ -418,7 +343,7 @@ function doUpdates(event)
 		basepeggio = [];
 		snapshot.basesOccupied.sort();
 		for (var idx=0;idx<snapshot.basesOccupied.length;idx++)
-			{basepeggio.push(allNotes[rootIndex+getMajorIdx(baseNotes[snapshot.basesOccupied[idx]])]);}
+			{basepeggio.push(allNotes[rootIndex+getMajorIdx(baseScaleIdx[snapshot.basesOccupied[idx]])]);}
 
 		baseSequence = new Tone.Sequence((time, note) => {
 			baseSynth.triggerAttackRelease(note, .5, time);
@@ -487,7 +412,7 @@ function updateGamesList(allSnapshots)
 	}
 	
 	var strTemp = window.location.search;
-	dateTemp = new Date(timeGrabber.value);
+	dateTemp = new Date(document.getElementById('startTime').value);
 	strTemp = replaceQueryParam('at', dateTemp.toISOString(), strTemp);
 	history.replaceState({test:'test'},'time',strTemp);
 }
@@ -592,52 +517,91 @@ function time2Speed(time)
 	if (time==0.5)
 		{return 7;}
 	else
-		{return 7-time;}
-	
+		{return 7-time;}	
 }
-// const bell = new Tone.MetalSynth({
-// 			harmonicity: 12,
-// 			resonance: 800,
-// 			modulationIndex: 20,
-// 			envelope: {
-// 				decay: 0.4,
-// 			},
-// 			volume: -15
-// 		}).toDestination();
-//
-// 		const bellPart = new Tone.Sequence(((time, freq) => {
-// 			bell.triggerAttack(freq, time, Math.random()*0.5 + 0.5);
-// 		}), [[300, null, 200],
-// 			[null, 200, 200],
-// 			[null, 200, null],
-// 			[200, null, 200]
-// 		], "4n").start(0);
-//
-// 		const conga = new Tone.MembraneSynth({
-// 			pitchDecay: 0.008,
-// 			octaves: 2,
-// 			envelope: {
-// 				attack: 0.0006,
-// 				decay: 0.5,
-// 				sustain: 0
-// 			}
-// 		}).toDestination();
-//
-// 		const congaPart = new Tone.Sequence(((time, pitch) => {
-// 			conga.triggerAttack(pitch, time, Math.random()*0.5 + 0.5);
-// 		}), ["G3", "C4", "C4", "C4"], "4n").start(0);
-//
-// 		Tone.Transport.bpm.value = 115;
-//
-// 		drawer().add({
-// 			tone: conga,
-// 			title: "Conga"
-// 		}).add({
-// 			tone: bell,
-// 			title: "Bell"
-// 		});
-//
-// 		// connect the UI with the components
-// 		document.querySelector("tone-play-toggle").addEventListener("start", () => Tone.Transport.start());
-// 		document.querySelector("tone-play-toggle").addEventListener("stop", () => Tone.Transport.stop());
+function setAllEventListeners(self)
+{
+	document.getElementById('startButton').addEventListener('click', () => {initialize()});
+	document.getElementById('curseButton').addEventListener('click', () => {increaseCurse()});
+	document.getElementById('startTime').addEventListener('change', (event) => 
+	{
+		var dateTemp = new Date(event.target.value);
+		console.log(dateTemp.toUTCString());
+		setEventSource(eventSource,dateTemp.toISOString(),updateTimeFudged);
+		flipUpdateFlag();
+	});
+	document.getElementById('gamesOptions').addEventListener('change', (event) => 
+	{	
+		setGameId(event.target.value);
+		var strTemp = window.location.search;
+		strTemp = replaceQueryParam('game', gameId, strTemp);
+		history.replaceState({test:'test'},'game',strTemp);
+	});
+	document.getElementById('updateRateSelect').addEventListener('change', (event) => 
+	{
+		if (event.target.checked)
+			{self.updateTimeFudged = self.updateTime/3;}
+		else
+			{self.updateTimeFudged = self.updateTime;}
+		
+		setEventSource(eventSource,null,self.updateTimeFudged);
+	});
+	document.getElementById('volumeSlider').addEventListener('change', (event) => {
+		var volTemp = (event.target.value-100)/2;
+		if (event.target.value == 0)
+		{
+			volTemp = -Infinity;
+		}
+		Tone.getDestination().volume.rampTo(volTemp, 0);
+	});
+	document.getElementById('speedSlider').addEventListener('change', (event) => {
+	
+		self.updateTime = speed2Time(event.target.value);
+	
+		if (document.getElementById('updateRateSelect').checked)
+			{self.updateTimeFudged = self.updateTime/3;}
+		else
+			{self.updateTimeFudged = self.updateTime;}
+	
+		setEventSource(eventSource,dateTemp.toISOString(),self.updateTimeFudged)	
+	});
+	document.getElementById('volumeSlider').addEventListener('change', (event) => {
+		var volTemp = (event.target.value-100)/2;
+		if (event.target.value == 0)
+		{
+			volTemp = -Infinity;
+		}
+		Tone.getDestination().volume.rampTo(volTemp, 0);
+	});	
+}
+function setEventSource(esRef,from,interval)
+{		//depends on global (or globalish) eventSource variable
+	var esRoot = 'https://api.sibr.dev/replay/v1/replay?';
+	if (esRef!==null)
+	{
+		// if (esRef.readyState==1)
+		// {
+			esRef.close();
+		// }
+		var strTemp = esRef.url;
+		
+	}
+	else 
+	{
+		var strTemp = esRoot;
+	}
+	
+	if (interval!==null)
+		{strTemp = replaceQueryParam('interval',`${interval*1000}`, strTemp);}
+	if (from!==null)
+		{strTemp = replaceQueryParam('from',`${from}`, strTemp);}
+	
+	eventSource = new EventSource(strTemp);
+	eventSource.onmessage = doUpdates;	
+
+	// return eventSou;
+}
+
+
+
 //
