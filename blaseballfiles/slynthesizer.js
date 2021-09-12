@@ -53,190 +53,38 @@ var rootIndex = minimumIndex;
 var strikeScaleIdx = [0,3,4,6,7,10,11,13,14]; //ugh, zero indexing. SO this is root, 4th,5th,7th
 var ballScaleIdx = [0,2,4,5,6,7,9,11,12,14,16,17,18,19,21+0,21+2,21+4,21+5,21+6,21+7,21+9,21+11,21+12,21+14,21+16,21+17,21+18,21+19,42+0,42+2,42+4,42+5,42+6,42+7,42+9,42+11,42+12,42+14,42+16,42+17,42+18,42+19]; //ugh, zero indexing. SO this is root, 3rd,5th,6th,7th
 var baseScaleIdx = [3,5,6,14,17]; //fuck, 4th, 6th, and 7th, sounds like LoZ
-// var outWigglyFactors = [15,20,50,100]
 
-var filter = new Tone.AutoFilter({
-			baseFrequency:'C4',
-			frequency: 0,
-			depth: 0 
-		}).toDestination().start();
-// var homeSynth = new Tone.FMSynth().connect(filter);//toDestination();
-var awaySynth = new Tone.PolySynth(Tone.Synth).connect(filter);
-awaySynth.set({
-			"volume": 0,
-			"detune": 0,
-			"portamento": 0.05,
-			"envelope": {
-				"attack": 1,
-				"attackCurve": "exponential",
-				"decay": 0.1,
-				"decayCurve": "linear",
-				"release": 0,
-				"releaseCurve": "exponential",
-				"sustain": 1
-			},
-			"oscillator": {
-				"partialCount": 0,
-				"partials": [],
-				"phase": 0,
-				"type": "sawtooth",
-				"count": 3,
-				"spread": 10
-			}
-		});
-var homeSynth = new Tone.PolySynth(Tone.Synth).connect(filter);	
-homeSynth.set({
-			"volume": 0,
-			"detune": 0,
-			"portamento": 0.05,
-			"envelope": {
-				"attack": 1,
-				"attackCurve": "exponential",
-				"decay": 0.1,
-				"decayCurve": "linear",
-				"release": 0,
-				"releaseCurve": "exponential",
-				"sustain": 1
-			},
-			"oscillator": {
-				"partialCount": 0,
-				"partials": [],
-				"phase": 0,
-				"type": "square",
-				"count": 3,
-				"spread": 20
-			}
-		});
-	
-var strikeSynth = new Tone.PolySynth().connect(filter);
-// strikeSynth.oscillator.type = 'sine';
 
-var posHomeDrumSynth = new Tone.MembraneSynth({
-			// pitchDecay: 0.008,
-			// octaves: 2,
-			// envelope: {
-			// 	attack: 0.0006,
-			// 	decay: 0.5,
-			// 	sustain: 0
-			// },
-				volume: 7
-		}).toDestination();
-var negHomeDrumSynth = new Tone.MembraneSynth({//}.toDestination();// {
-			pitchDecay: 0.4,
-			octaves: 2,
-			envelope: {
-				attack: 0.0006,
-				decay: 0.5,
-				sustain: 0
-			},
-			volume: 7
-		}).toDestination();
-var homeDrumSynth = new Tone.MembraneSynth().toDestination();		
+var synths = createSynths();
 var homeSpacing = 0;
-// var	homeDrumSequence = new Tone.Sequence(((time, pitch) => {
-// 			homeDrumSynth.triggerAttack(pitch, time);
-// 		}), [allNotes[rootIndex-12]], homeSpacing).start(0);
-
-var lowPass = new Tone.Filter({
-		  frequency: 8000,
-		}).toDestination();
-
-var posAwayDrumSynth = new Tone.NoiseSynth({
-	  volume: -8,
-	  noise: {
-	    type: 'white',
-	    playbackRate: 3
-	  },
-	  envelope: {
-	    attack: 0.03,
-	    decay: 0.20,
-	    sustain: 0.15,
-	    release: 0.001,
-	  },
-	}).connect(lowPass);
-var negAwayDrumSynth = new Tone.NoiseSynth({
-	volume: -8,
-	noise:{
-		playbackRate: 1000,
-		type: "pink"
-	},
-	  envelope: {
-	    attack: 0.03,
-	    decay: 0.20,
-	    sustain: 0.15,
-	    release: 0.001,
-	  }
-	}).toDestination();
-var awayDrumSynth = new Tone.NoiseSynth().toDestination();			
 var awaySpacing = 0;
 
-// var	awayDrumSequence = new Tone.Sequence(((time) => {
-// 			awayDrumSynth.triggerAttack(time);
-// 		}),[]).start(0);
-		
-		
-var baseSynth = new Tone.PolySynth({
-	"volume": 5,
-	"detune": 0,
-	"portamento": 0.05,
-	"envelope": {
-		"attack": 0.005,
-		"attackCurve": "linear",
-		"decay": 0.1,
-		"decayCurve": "exponential",
-		"release": 1,
-		"releaseCurve": "exponential",
-		"sustain": 0.3
-	},
-	"oscillator": {
-		"partialCount": 0,
-		"partials": [],
-		"phase": 0,
-		"type": "triangle"
-	}
-}).toDestination(); //Should this go through the filter?
-		
-
-		// 467
-var baseSequence = new Tone.Sequence((time, note) => {
-	synth.triggerAttackRelease(note, .5, time);
-}, [],updateTime/2).start(0);
+var baseSequence;//  = new Tone.Sequence((time, note) => {
+// 	synth.triggerAttackRelease(note, .5, time);
+// }, [],updateTime/2).start(0);
 
 var basepeggio=[];
 
-Tone.Transport.start();	
+// Tone.Transport.start();	
 		
 // var allSynths = [inningSynth,strikeSynth,ballSynth];
 
 // var ballPattern = new Tone.Pattern(function(time, note){
 // 			strikeSynth.triggerAttackRelease(note, updateTime/16);
 // 		}, []).start(0);
-var ballSequence = new Tone.Sequence(function(time, note){
-			strikeSynth.triggerAttackRelease(note, updateTime/16);
-		}, [],1).start(0);
-		
+var ballSequence; // = new Tone.Sequence(function(time, note){
+ // 			synths.primary.triggerAttackRelease(note, updateTime/16);
+ // 		}, [],1).start(0);
+ //
 var ballpeggio = [];
 
-var distortion = new Tone.Distortion(0.8).toDestination();
 
-var insyntherated1 = new Tone.DuoSynth({
-	volume:10,
-	oscillator:{type:"fattriangle"}
-}).connect(distortion);
-var insyntherated2 = new Tone.DuoSynth({
-	volume:10,
-	oscillator:{type:"fatsawtooth"}
-}).connect(distortion);
-var insyntherated3 = new Tone.DuoSynth({
-	volume:10,
-	oscillator:{type:"fatsine"}
-}).connect(distortion);
 
 Tone.Transport.start();
 function doUpdates(event)
 {		
 	//TODO: still overlapping on inning change?
-	console.log(event.currentTarget.url);
+	// console.log(event.currentTarget.url);
 	// Tone.Transport.stop();
     var snapshots = digestSnapshots(event);
 	if (updateGamesListFlag)
@@ -261,11 +109,11 @@ function doUpdates(event)
 		
 		if (snapshot.topOfInning)
 		{
-			strikeSynth = awaySynth;
+			synths.primary = synths.away;
 		}
 		else
 		{
-			strikeSynth = homeSynth;
+			synths.primary = synths.home;
 		}
 		rootIndex = minimumIndex+snapshot.inning;
 		if (snapshot.homeScore == 0)
@@ -279,14 +127,14 @@ function doUpdates(event)
 			{
 				// homeDrumSynth = negHomeDrumSynth;
 				var homeDrumSequence = new Tone.Sequence(((time, pitch) => {
-					negHomeDrumSynth.triggerAttack(pitch, time);
+					synths.negHomeDrum.triggerAttack(pitch, time);
 				}), [allNotes[rootIndex-24]], homeSpacing).start(0);
 			}
 			else
 			{
 				// homeDrumSynth = posHomeDrumSynth;
 				var homeDrumSequence = new Tone.Sequence(((time, pitch) => {
-					posHomeDrumSynth.triggerAttack(pitch, time);
+					synths.posHomeDrum.triggerAttack(pitch, time);
 				}), [allNotes[rootIndex-24]], homeSpacing).start(0);				
 			}
 
@@ -300,10 +148,10 @@ function doUpdates(event)
 			awaySpacing = updateTime/(Math.abs(snapshot.awayScore));
 			if (snapshot.awayScore<0)
 			{
-				// awayDrumSynth = negAwayDrumSynth;
+				// awayDrumSynth = synths.negAwayDrum;
 				var awayDrumSequence = new Tone.Sequence(((time,pitch) => {
-					negAwayDrumSynth.triggerAttack(time);
-					negAwayDrumSynth.triggerRelease(time+.23);					
+					synths.negAwayDrum.triggerAttack(time);
+					synths.negAwayDrum.triggerRelease(time+.23);					
 				}),[1],[awaySpacing]).start(0); //1 is just a bs placeholder
 				// awayDrumSequence = new Tone.Sequence(((time,pitch) => {
 				// 	awayDrumSynth.triggerAttack(pitch,time);
@@ -313,13 +161,13 @@ function doUpdates(event)
 			{
 				// awayDrumSynth = posAwayDrumSynth;
 				var awayDrumSequence = new Tone.Sequence(((time,pitch) => {
-					posAwayDrumSynth.triggerAttack(time);
-					posAwayDrumSynth.triggerRelease(time+.23);
+					synths.posAwayDrum.triggerAttack(time);
+					synths.posAwayDrum.triggerRelease(time+.23);
 				}),[1],[awaySpacing]).start(0); //1 is just a bs placeholder
 			}
 		}			
 	
-		filter.set({
+		synths.outEffect.set({
 			frequency: 100*Math.tanh(snapshot.outs/13),
 			depth: Math.tanh(snapshot.outs/(3*curseMultiplier))
 		});
@@ -335,7 +183,7 @@ function doUpdates(event)
 		// }, ballpeggio);
 		// ballPattern.start(0);
 		ballSequence = new Tone.Sequence(function(time, note){
-			strikeSynth.triggerAttackRelease(note, updateTime/(2**snapshot.balls),time);
+			synths.primary.triggerAttackRelease(note, updateTime/(2**snapshot.balls),time);
 		}, ballpeggio,updateTime/(2**snapshot.balls));
 		ballSequence.start(0);
 	
@@ -346,15 +194,19 @@ function doUpdates(event)
 			{basepeggio.push(allNotes[rootIndex+getMajorIdx(baseScaleIdx[snapshot.basesOccupied[idx]])]);}
 
 		baseSequence = new Tone.Sequence((time, note) => {
-			baseSynth.triggerAttackRelease(note, .5, time);
+			synths.baserunner.triggerAttackRelease(note, .5, time);
 		}, basepeggio,updateTime/(2*basepeggio.length)).start(0);
 	
 		baseSequence.start(0);
 		if (snapshot.lastUpdate.includes('incinerated'))
-			{insyntherated1.triggerAttackRelease(allNotes[rootIndex+48],updateTime).frequency.rampTo(allNotes[rootIndex-24],4);
-			insyntherated2.triggerAttackRelease(allNotes[rootIndex+44],updateTime).frequency.rampTo(allNotes[rootIndex-20],4);
-			insyntherated3.triggerAttackRelease(allNotes[rootIndex+41],updateTime).frequency.rampTo(allNotes[rootIndex-21],4);
+			{synths.insyntherated1.triggerAttackRelease(allNotes[rootIndex+48],updateTime).frequency.rampTo(allNotes[rootIndex-24],4);
+			synths.insyntherated2.triggerAttackRelease(allNotes[rootIndex+44],updateTime).frequency.rampTo(allNotes[rootIndex-20],4);
+			synths.insyntherated3.triggerAttackRelease(allNotes[rootIndex+41],updateTime).frequency.rampTo(allNotes[rootIndex-21],4);
 			}
+
+
+		Tone.Transport.start();
+		
 		console.log('|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|')				
 		// console.log(snapshot.awayTeamNickname+' at ' + snapshot.homeTeamNickname);
 		console.log(snapshot.lastUpdate);
@@ -365,8 +217,7 @@ function doUpdates(event)
 		console.log('bases: '+snapshot.basesOccupied);
 		console.log('homeScore: '+snapshot.homeScore);
 		console.log('awayScore: '+snapshot.awayScore);
-
-		Tone.Transport.start();
+		
 		if (document.body.classList.contains('bubbles'))
 		{
 			if (firstTime)
@@ -433,13 +284,13 @@ function initialize()
 function increaseCurse()
 {
 	curseMultiplier = 2;
-	filter = new Tone.Vibrato({
+	synths.outEffect = new Tone.Vibrato({
 				// baseFrequency:'C4',
 				frequency: 0,
 				depth: 0 
 			}).toDestination();
 	
-	awaySynth = new Tone.Synth({
+	synths.away = new Tone.Synth({
 				"volume": 0,
 				"detune": 0,
 				"portamento": 0.05,
@@ -460,8 +311,8 @@ function increaseCurse()
 					"count": 3,
 					"spread": 10
 				}
-			}).connect(filter);
-	homeSynth = new Tone.Synth({
+			}).connect(synths.outEffect);
+	synths.home = new Tone.Synth({
 				"volume": 0,
 				"detune": 0,
 				"portamento": 0.05,
@@ -482,7 +333,7 @@ function increaseCurse()
 					"count": 3,
 					"spread": 20
 				}
-			}).connect(filter);
+			}).connect(synths.outEffect);
 			
 	
 }
@@ -601,7 +452,155 @@ function setEventSource(esRef,from,interval)
 
 	// return eventSou;
 }
+function createSynths()
+{
+	var synths = {};
+	synths.outEffect = new Tone.AutoFilter({
+				baseFrequency:'C4',
+				frequency: 0,
+				depth: 0 
+			}).toDestination().start();
 
+	synths.away = new Tone.PolySynth(Tone.Synth).connect(synths.outEffect);
+	synths.away.set({
+				"volume": 0,
+				"detune": 0,
+				"portamento": 0.05,
+				"envelope": {
+					"attack": 1,
+					"attackCurve": "exponential",
+					"decay": 0.1,
+					"decayCurve": "linear",
+					"release": 0,
+					"releaseCurve": "exponential",
+					"sustain": 1
+				},
+				"oscillator": {
+					"partialCount": 0,
+					"partials": [],
+					"phase": 0,
+					"type": "sawtooth",
+					"count": 3,
+					"spread": 10
+				}
+			});
+	synths.home = new Tone.PolySynth(Tone.Synth).connect(synths.outEffect);	
+	synths.home.set({
+				"volume": 0,
+				"detune": 0,
+				"portamento": 0.05,
+				"envelope": {
+					"attack": 1,
+					"attackCurve": "exponential",
+					"decay": 0.1,
+					"decayCurve": "linear",
+					"release": 0,
+					"releaseCurve": "exponential",
+					"sustain": 1
+				},
+				"oscillator": {
+					"partialCount": 0,
+					"partials": [],
+					"phase": 0,
+					"type": "square",
+					"count": 3,
+					"spread": 20
+				}
+			});
+	
+	synths.primary = new Tone.PolySynth().connect(synths.outEffect);
+
+	synths.posHomeDrum = new Tone.MembraneSynth({
+				// pitchDecay: 0.008,
+				// octaves: 2,
+				// envelope: {
+				// 	attack: 0.0006,
+				// 	decay: 0.5,
+				// 	sustain: 0
+				// },
+					volume: 7
+			}).toDestination();
+	synths.negHomeDrum = new Tone.MembraneSynth({
+				pitchDecay: 0.4,
+				octaves: 2,
+				envelope: {
+					attack: 0.0006,
+					decay: 0.5,
+					sustain: 0
+				},
+				volume: 7
+			}).toDestination();
+
+	synths.lowPassFilter = new Tone.Filter({
+			  frequency: 8000,
+			}).toDestination();
+
+	synths.posAwayDrum = new Tone.NoiseSynth({
+		  volume: -8,
+		  noise: {
+		    type: 'white',
+		    playbackRate: 3
+		  },
+		  envelope: {
+		    attack: 0.03,
+		    decay: 0.20,
+		    sustain: 0.15,
+		    release: 0.001,
+		  },
+		}).connect(synths.lowPassFilter);
+	synths.negAwayDrum = new Tone.NoiseSynth({
+		volume: -8,
+		noise:{
+			playbackRate: 1000,
+			type: "pink"
+		},
+		  envelope: {
+		    attack: 0.03,
+		    decay: 0.20,
+		    sustain: 0.15,
+		    release: 0.001,
+		  }
+		}).toDestination();
+	synths.awayDrum = new Tone.NoiseSynth().toDestination();			
+		
+	synths.baserunner = new Tone.PolySynth({
+		"volume": 5,
+		"detune": 0,
+		"portamento": 0.05,
+		"envelope": {
+			"attack": 0.005,
+			"attackCurve": "linear",
+			"decay": 0.1,
+			"decayCurve": "exponential",
+			"release": 1,
+			"releaseCurve": "exponential",
+			"sustain": 0.3
+		},
+		"oscillator": {
+			"partialCount": 0,
+			"partials": [],
+			"phase": 0,
+			"type": "triangle"
+		}
+	}).toDestination(); //Should this go through the filter?
+		
+	synths.distortionEffect = new Tone.Distortion(0.8).toDestination();
+
+	synths.insyntherated1 = new Tone.DuoSynth({
+		volume:10,
+		oscillator:{type:"fattriangle"}
+	}).connect(synths.distortionEffect);
+	synths.insyntherated2 = new Tone.DuoSynth({
+		volume:10,
+		oscillator:{type:"fatsawtooth"}
+	}).connect(synths.distortionEffect);
+	synths.insyntherated3 = new Tone.DuoSynth({
+		volume:10,
+		oscillator:{type:"fatsine"}
+	}).connect(synths.distortionEffect);		
+	
+	return synths;
+}
 
 
 //
